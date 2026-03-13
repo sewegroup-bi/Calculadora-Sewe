@@ -1,164 +1,117 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora Comercial — Sewe Group BI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Chakra+Petch:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="estilo.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Comercial — Sewe Group BI</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Sora:wght@700;800&family=Chakra+Petch:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<div class="hdr">
-  <div class="hdr-logo">
-    <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="6" fill="white" fill-opacity="0.12"/><text x="19" y="27" text-anchor="middle" font-family="'Chakra Petch'" font-weight="800" font-size="26" fill="white">S</text></svg>
-    <div>
-      <div style="color:#fff;font-family:'Sora';font-size:18px;font-weight:800;letter-spacing:3px">SEWE GROUP</div>
-      <div style="color:#0ab5a0;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase">Inteligência no seu negócio!</div>
-    </div>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px"><div class="hdr-pill">CALCULADORA COMERCIAL &mdash; SEWE BI</div><button onclick="abrirAdmin()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer">⚙ ADMIN</button></div>
-</div>
-
-<div class="page">
-<div class="main-grid">
-
-<div>
-  <div class="card">
-    <div class="ch"><div class="ci blue">👤</div><div><div class="ct">Dados do Cliente</div></div></div>
-    <div class="cb">
-      <div class="g2">
-        <div class="field"><label>Nome do Cliente *</label><input type="text" id="cName" oninput="calc()"></div>
-        <div class="field"><label>Contato *</label><input type="text" id="cContact"></div>
-      </div>
-      <div class="g2" style="margin-top:12px">
-        <div class="field"><label>Consultor Responsável *</label><input type="text" id="cConsult"></div>
-        <div class="field"><label>Data da Proposta</label><input type="date" id="cDate"></div>
-      </div>
-      <div class="divider"></div>
-      <label>Tipo de Contratação</label>
-      <div class="type-wrap">
-        <div class="type-btn active" id="tb-NEWLOGO" onclick="setType('NEWLOGO')"><div class="type-tag">🆕 New Logo</div></div>
-        <div class="type-btn" id="tb-CROSS" onclick="setType('CROSS')"><div class="type-tag">🔄 Cross / Upsell</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ci teal">📦</div><div><div class="ct">Suítes & Produtos</div></div></div>
-    <div class="cb">
-      <label>Suíte</label>
-      <div class="suite-grid">
-        <div class="suite-btn sel" id="sb-COMERCIAL" onclick="setSuite('COMERCIAL')"><span class="suite-emoji">🛒</span><span class="suite-lbl">Comercial</span></div>
-        <div class="suite-btn" id="sb-FINANCEIRA" onclick="setSuite('FINANCEIRA')"><span class="suite-emoji">💰</span><span class="suite-lbl">Financeira</span></div>
-        <div class="suite-btn" id="sb-SUPRIMENTOS" onclick="setSuite('SUPRIMENTOS')"><span class="suite-emoji">📦</span><span class="suite-lbl">Suprimentos</span></div>
-        <div class="suite-btn" id="sb-BENEFICIOS" onclick="setSuite('BENEFICIOS')"><span class="suite-emoji">🎁</span><span class="suite-lbl">Benefícios</span></div>
-        <div class="suite-btn" id="sb-POSVENDA" onclick="setSuite('POSVENDA')"><span class="suite-emoji">🤝</span><span class="suite-lbl">Pós-Venda</span></div>
-        <div class="suite-btn" id="sb-PROJETO" onclick="setSuite('PROJETO')"><span class="suite-emoji">🔨</span><span class="suite-lbl">Projeto</span></div>
-      </div>
-      <div class="divider"></div>
-      <div id="tier-tabs-wrap"></div>
-      <table class="ptable">
-        <thead><tr><th></th><th>Produto</th><th>Tipo</th><th>Implantação</th><th>MRR</th></tr></thead>
-        <tbody id="ptbody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="card" id="projeto-card" style="display:none">
-    <div class="ch"><div class="ci purple">🔨</div><div><div class="ct">Suite Projeto</div></div></div>
-    <div class="cb"><div class="g3">
-        <div class="field"><label>Horas</label><input type="number" id="projHoras" value="10" oninput="calc()"></div>
-        <div class="field"><label>R$/Hora</label><input type="number" id="projValHora" value="275" oninput="calc()"></div>
-        <div class="field"><label>Total</label><div id="projTotal" style="font-weight:700">R$ 0</div></div>
-    </div></div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ci warn">👥</div><div><div class="ct">Usuários (Cotas de 50)</div></div></div>
-    <div class="cb">
-      <div class="users-box">
-        <div class="users-ctrl">
-          <button class="ubtn" onclick="changeU(-1)">−</button>
-          <input type="number" id="uQty" value="1" min="1" oninput="calc()">
-          <button class="ubtn" onclick="changeU(1)">+</button>
+    <div class="hdr">
+        <div class="hdr-logo">
+            <div class="hdr-mark">S</div>
+            <div class="hdr-name">SEWE GROUP <span>BI</span></div>
         </div>
-        <div class="u-unit">
-          <div class="u-price" id="uUnitPrice">Incluso</div>
-          <div class="u-label">na Sustentação Base</div>
+        <div class="hdr-pill">CALCULADORA COMERCIAL</div>
+    </div>
+
+    <div class="page">
+        <div class="main-grid">
+            <div class="left-col">
+                <div class="card">
+                    <div class="ch"><div class="ct">Dados do Cliente</div></div>
+                    <div class="cb">
+                        <input type="text" id="cName" placeholder="Nome do Cliente" oninput="calc()">
+                        <div class="g2" style="margin-top:10px">
+                            <input type="text" id="cContact" placeholder="Contato">
+                            <input type="text" id="cConsult" placeholder="Consultor">
+                        </div>
+                        <input type="date" id="cDate" style="margin-top:10px">
+                        <div class="type-wrap">
+                            <div class="type-btn active" id="tb-NEWLOGO" onclick="setType('NEWLOGO')"><div class="type-tag">New Logo</div></div>
+                            <div class="type-btn" id="tb-CROSS" onclick="setType('CROSS')"><div class="type-tag">Cross/Upsell</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ch"><div class="ct">Suítes & Produtos</div></div>
+                    <div class="cb">
+                        <div class="suite-grid">
+                            <div class="suite-btn sel" id="sb-COMERCIAL" onclick="setSuite('COMERCIAL')"><span class="suite-lbl">Comercial</span></div>
+                            <div class="suite-btn" id="sb-FINANCEIRA" onclick="setSuite('FINANCEIRA')"><span class="suite-lbl">Financeira</span></div>
+                            <div class="suite-btn" id="sb-SUPRIMENTOS" onclick="setSuite('SUPRIMENTOS')"><span class="suite-lbl">Suprimentos</span></div>
+                        </div>
+                        <div class="divider"></div>
+                        <div id="tier-tabs-wrap"></div>
+                        <table class="ptable"><tbody id="ptbody"></tbody></table>
+                    </div>
+                </div>
+
+                <div class="card" id="projeto-card" style="display:none">
+                    <div class="cb"><div class="g3">
+                        <input type="number" id="projHoras" value="10" oninput="calc()">
+                        <input type="number" id="projValHora" value="275" oninput="calc()">
+                        <div id="projTotal" style="font-weight:bold">R$ 0</div>
+                    </div></div>
+                </div>
+
+                <div class="card">
+                    <div class="ch"><div class="ct">Usuários (Cotas de 50)</div></div>
+                    <div class="cb">
+                        <div class="users-box">
+                            <div class="users-ctrl">
+                                <button class="ubtn" onclick="changeU(-1)">-</button>
+                                <input type="number" id="uQty" value="1" oninput="calc()">
+                                <button class="ubtn" onclick="changeU(1)">+</button>
+                            </div>
+                            <div class="u-unit"><div class="u-price">Incluso</div><div class="u-label">na Sustentação</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ch"><div class="ct">Sustentação</div></div>
+                    <div class="cb">
+                        <div class="dev-select-wrap">
+                            <div class="dev-opt" id="dev-NAO" onclick="setDev('NAO')"><div class="dev-opt-lbl">NÃO</div></div>
+                            <div class="dev-opt active" id="dev-SIM" onclick="setDev('SIM')"><div class="dev-opt-lbl">SIM (+R$750)</div></div>
+                        </div>
+                        <div id="sust-base-card" style="display:flex;justify-content:space-between;margin-top:15px">
+                            <span>Sustentação + Licenciamento</span>
+                            <span id="sust-val-display" style="font-weight:bold;color:var(--teal)">R$ 799,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="cb"><div class="g2">
+                        <input type="number" id="dImpl" placeholder="Desc. Impl. %" oninput="calc()">
+                        <input type="number" id="dMRR" placeholder="Desc. MRR %" oninput="calc()">
+                    </div></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="margin-panel">
+                    <div class="mp-title">ANÁLISE INTERNA</div>
+                    <div class="mp-box-val" id="mp-arr">R$ 0</div>
+                    <div class="sig-bar"><div class="sig-fill" id="mp-bar" style="width:0%"></div></div>
+                </div>
+                <div class="card">
+                    <div class="sval-block"><div id="impl-lines"></div></div>
+                    <div class="sval-block"><div id="mrr-lines"></div></div>
+                    <div class="grand-block">
+                        <div class="grand-row"><span>Implantação Final</span><span id="gb-impl" class="grand-val">R$ 0</span></div>
+                        <div class="grand-row"><span>MRR Final</span><span id="gb-mrr" class="grand-val">R$ 0</span></div>
+                        <div class="grand-row big"><span>Total 12m</span><span id="gb-total" class="grand-val">R$ 0</span></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.print()">Gerar PDF</button>
+                </div>
+            </div>
         </div>
-        <div class="u-total">
-          <div class="u-totalval" id="uTotalMRR">R$ 0,00</div>
-          <div class="u-totallbl">Custo Adicional</div>
-        </div>
-      </div>
-      <div class="alert info">ℹ️ Cada pacote de Sustentação (R$ 799) inclui até 50 usuários licenciados.</div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ci purple">⚙️</div><div><div class="ct">Desenvolvimento & Sustentação</div></div></div>
-    <div class="cb">
-      <label>Opção de Desenvolvimento</label>
-      <div class="dev-select-wrap">
-        <div class="dev-opt" id="dev-NAO" onclick="setDev('NAO')"><div class="dev-opt-lbl">NÃO</div></div>
-        <div class="dev-opt active" id="dev-SIM" onclick="setDev('SIM')"><div class="dev-opt-lbl">SIM (+R$750)</div></div>
-      </div>
-      <div class="divider"></div>
-      <label>Sustentação Mensal</label>
-      <div id="sust-base-card" style="padding:12px;background:var(--bg);border-radius:9px;display:flex;justify-content:space-between;align-items:center">
-        <div><div style="font-weight:600">Sustentação + Licenciamento</div><div style="font-size:11px;color:var(--muted)">Suporte + Qlik + Cota de 50 Users</div></div>
-        <div id="sust-val-display" style="font-family:'Sora';font-size:16px;font-weight:700;color:var(--teal)">R$ 799/mês</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="ch"><div class="ci green">🏷️</div><div><div class="ct">Descontos & Parcelamento</div></div></div>
-    <div class="cb">
-      <div class="g2">
-        <div class="field"><label>Desc. Implantação (%)</label><input type="number" id="dImpl" value="0" oninput="calc()"></div>
-        <div class="field"><label>Desc. MRR (%)</label><input type="number" id="dMRR" value="0" oninput="calc()"></div>
-      </div>
-      <div class="divider"></div>
-      <div id="parcelas-btns" style="display:flex;gap:5px">
-        <button class="parcela-btn active" onclick="setParcelas(1)" data-p="1">À vista</button>
-        <button class="parcela-btn" onclick="setParcelas(2)" data-p="2">2x</button>
-        <button class="parcela-btn" onclick="setParcelas(3)" data-p="3">3x</button>
-      </div>
-    </div>
-  </div>
-
-</div><div class="sidebar">
-  <div class="margin-panel no-print">
-    <div class="mp-title">📊 Análise de Margem</div>
-    <div class="mp-grid">
-      <div class="mp-box"><div class="mp-box-lbl">ARR Proposta</div><div class="mp-box-val" id="mp-arr">R$ 0</div></div>
-      <div class="mp-box highlight"><div class="mp-box-lbl">Lucratividade</div><div class="mp-box-val" id="mp-arr-min">—</div></div>
-    </div>
-    <div class="sig-wrap"><div class="sig-bar"><div class="sig-fill" id="mp-bar" style="width:0%"></div></div></div>
-  </div>
-
-  <div class="card">
-    <div class="ch" style="background:var(--primary);color:#fff"><div class="ct" style="color:#fff">📋 Resumo</div></div>
-    <div class="sval-block"><div class="sval-title">Implantação</div><div id="impl-lines"></div></div>
-    <div style="padding:0 20px 16px"><div class="sval-title">Recorrência (MRR)</div><div id="mrr-lines"></div></div>
-    <div class="grand-block">
-      <div class="grand-row"><span class="grand-lbl">Implantação Final</span><span class="grand-val" id="gb-impl">R$ 0</span></div>
-      <div class="grand-row"><span class="grand-lbl">MRR Final</span><span class="grand-val" id="gb-mrr">R$ 0</span></div>
-      <div class="grand-sep"></div>
-      <div class="grand-row big"><span class="grand-lbl">Total Contrato</span><span class="grand-val" id="gb-total">R$ 0</span></div>
-    </div>
-    <div class="actions">
-      <button class="btn btn-primary" onclick="gerarPDF()" style="width:100%">Gerar Proposta PDF</button>
-      <button class="btn btn-ghost" onclick="limpar()" style="width:100%;margin-top:10px">Limpar</button>
-    </div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
