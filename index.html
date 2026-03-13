@@ -1,86 +1,356 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Comercial — Sewe Group BI</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Sora:wght@700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Comercial — Sewe Group BI</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Chakra+Petch:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="hdr">
-        <div class="hdr-logo"><div class="hdr-mark">S</div><div class="hdr-name">SEWE GROUP <span>BI</span></div></div>
-        <div class="hdr-pill">CALCULADORA COMERCIAL</div>
+
+<div class="hdr">
+  <div class="hdr-logo">
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="38" height="38" rx="6" fill="white" fill-opacity="0.12"/>
+      <text x="19" y="27" text-anchor="middle" font-family="'Chakra Petch','Arial Black',sans-serif" font-weight="800" font-size="26" fill="white" letter-spacing="-1">S</text>
+    </svg>
+    <div>
+      <div style="color:#fff;font-family:'Sora',sans-serif;font-size:18px;font-weight:800;letter-spacing:3px;line-height:1.1">SEWE GROUP</div>
+      <div style="color:#0ab5a0;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:1px">Inteligência no seu negócio!</div>
     </div>
-    <div class="page">
-        <div class="main-grid">
-            <div class="left-col">
-                <div class="card">
-                    <div class="ch"><div class="ct">Dados do Cliente</div></div>
-                    <div class="cb">
-                        <input type="text" id="cName" placeholder="Nome do Cliente" oninput="calc()">
-                        <div class="g2" style="margin-top:10px"><input type="text" placeholder="Contato"><input type="text" placeholder="Consultor"></div>
-                        <input type="date" id="cDate" style="margin-top:10px">
-                        <div class="type-wrap">
-                            <div class="type-btn active" id="tb-NEWLOGO" onclick="setType('NEWLOGO')">New Logo</div>
-                            <div class="type-btn" id="tb-CROSS" onclick="setType('CROSS')">Cross/Upsell</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="ch"><div class="ct">Suítes & Produtos</div></div>
-                    <div class="cb">
-                        <div class="suite-grid">
-                            <div class="suite-btn sel" id="sb-COMERCIAL" onclick="setSuite('COMERCIAL')">Comercial</div>
-                            <div class="suite-btn" id="sb-FINANCEIRA" onclick="setSuite('FINANCEIRA')">Financeira</div>
-                            <div class="suite-btn" id="sb-SUPRIMENTOS" onclick="setSuite('SUPRIMENTOS')">Suprimentos</div>
-                        </div>
-                        <div class="divider"></div>
-                        <div id="tier-tabs-wrap"></div>
-                        <table class="ptable"><tbody id="ptbody"></tbody></table>
-                    </div>
-                </div>
-                <div class="card" id="projeto-card" style="display:none">
-                    <div class="cb"><div class="g3">
-                        <input type="number" id="projHoras" value="10" oninput="calc()"><input type="number" id="projValHora" value="275" oninput="calc()"><div id="projTotal" style="font-weight:bold">R$ 0</div>
-                    </div></div>
-                </div>
-                <div class="card">
-                    <div class="ch"><div class="ct">Usuários (Pacotes de 50)</div></div>
-                    <div class="cb">
-                        <div class="users-box">
-                            <div class="users-ctrl"><button class="ubtn" onclick="changeU(-1)">-</button><input type="number" id="uQty" value="1" oninput="calc()"><button class="ubtn" onclick="changeU(1)">+</button></div>
-                            <div class="u-unit"><div class="u-price">Incluso</div><div class="u-label">na Sustentação</div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="ch"><div class="ct">Sustentação</div></div>
-                    <div class="cb">
-                        <div id="sust-base-card" style="display:flex;justify-content:space-between;align-items:center">
-                            <span>Sustentação + Licenciamento</span>
-                            <span id="sust-val-display" style="font-weight:bold;color:var(--teal);font-size:18px">R$ 799,00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card"><div class="cb"><div class="g2"><input type="number" id="dImpl" placeholder="Desc. Impl. %" oninput="calc()"><input type="number" id="dMRR" placeholder="Desc. MRR %" oninput="calc()"></div></div></div>
-            </div>
-            <div class="sidebar">
-                <div class="margin-panel"><div class="mp-title">ARR PROPOSTA</div><div class="mp-box-val" id="mp-arr">R$ 0</div><div class="sig-bar"><div class="sig-fill" id="mp-bar" style="width:100%"></div></div></div>
-                <div class="card">
-                    <div class="ch" style="background:var(--primary);color:#fff"><div class="ct" style="color:#fff">📋 Resumo</div></div>
-                    <div class="sval-block"><div class="sval-title">Implantação</div><div id="impl-lines"></div></div>
-                    <div class="sval-block"><div class="sval-title">MRR</div><div id="mrr-lines"></div></div>
-                    <div class="grand-block">
-                        <div class="grand-row"><span>Implantação Final</span><span id="gb-impl" class="grand-val">R$ 0</span></div>
-                        <div class="grand-row"><span>MRR Final</span><span id="gb-mrr" class="grand-val">R$ 0</span></div>
-                        <div class="grand-row big"><span>Total 12m</span><span id="gb-total" class="grand-val">R$ 0</span></div>
-                    </div>
-                    <button class="btn btn-primary" onclick="window.print()">Gerar PDF</button>
-                </div>
-            </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="hdr-pill">CALCULADORA COMERCIAL &mdash; SEWE BI</div>
+    <button onclick="abrirAdmin()" title="Administração de Preços" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.5px;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.18)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.08)';this.style.color='rgba(255,255,255,.6)'">⚙ ADMIN</button>
+  </div>
+</div>
+
+<div class="page">
+<div class="main-grid">
+
+<div>
+
+  <div class="card">
+    <div class="ch"><div class="ci blue">👤</div><div><div class="ct">Dados do Cliente</div><div class="cs">Identificação e tipo de contratação — <span style="color:var(--danger)">* campos obrigatórios</span></div></div></div>
+    <div class="cb">
+      <div class="g2">
+        <div class="field"><label>Nome do Cliente <span style="color:var(--danger)">*</span></label><input type="text" id="cName" placeholder="Ex: Distribuidora ABC Ltda" oninput="calc();clearErr(this)"></div>
+        <div class="field"><label>Contato <span style="color:var(--danger)">*</span></label><input type="text" id="cContact" placeholder="Nome do responsável" oninput="clearErr(this)"></div>
+      </div>
+      <div class="g2" style="margin-top:12px">
+        <div class="field"><label>Consultor Responsável <span style="color:var(--danger)">*</span></label><input type="text" id="cConsult" placeholder="Seu nome" oninput="clearErr(this)"></div>
+        <div class="field"><label>Data da Proposta</label><input type="date" id="cDate"></div>
+      </div>
+      <div class="divider"></div>
+      <label>Tipo de Contratação</label>
+      <div class="type-wrap">
+        <div class="type-btn active" id="tb-NEWLOGO" onclick="setType('NEWLOGO')">
+          <div class="type-tag">🆕 New Logo</div>
+          <div class="type-desc">Novo cliente sem soluções ativas na BU BI</div>
         </div>
+        <div class="type-btn" id="tb-CROSS" onclick="setType('CROSS')">
+          <div class="type-tag">🔄 Cross / Upsell</div>
+          <div class="type-desc">Já possui contrato ativo com a Sewe Group</div>
+        </div>
+      </div>
+      <div id="type-alert" class="alert info" style="margin-top:10px">
+        <span>ℹ️</span><span id="type-alert-txt">New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.</span>
+      </div>
     </div>
-    <script src="script.js"></script>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ci teal">📦</div><div><div class="ct">Suítes & Produtos</div><div class="cs">Selecione a suíte, tier e módulos desejados</div></div></div>
+    <div class="cb">
+      <label>Suíte</label>
+      <div class="suite-grid">
+        <div class="suite-btn sel" id="sb-COMERCIAL" onclick="setSuite('COMERCIAL')"><span class="suite-emoji">🛒</span><span class="suite-lbl">Comercial</span></div>
+        <div class="suite-btn" id="sb-FINANCEIRA" onclick="setSuite('FINANCEIRA')"><span class="suite-emoji">💰</span><span class="suite-lbl">Financeira</span></div>
+        <div class="suite-btn" id="sb-SUPRIMENTOS" onclick="setSuite('SUPRIMENTOS')"><span class="suite-emoji">📦</span><span class="suite-lbl">Suprimentos</span></div>
+        <div class="suite-btn" id="sb-BENEFICIOS" onclick="setSuite('BENEFICIOS')"><span class="suite-emoji">🎁</span><span class="suite-lbl">Benefícios</span></div>
+        <div class="suite-btn" id="sb-POSVENDA" onclick="setSuite('POSVENDA')"><span class="suite-emoji">🤝</span><span class="suite-lbl">Pós-Venda</span></div>
+        <div class="suite-btn" id="sb-PROJETO" onclick="setSuite('PROJETO')"><span class="suite-emoji">🔨</span><span class="suite-lbl">Projeto / Horas</span></div>
+      </div>
+      <div class="divider"></div>
+      <div id="tier-tabs-wrap"></div>
+      <table class="ptable">
+        <thead><tr>
+          <th style="width:28px"></th>
+          <th>Produto / Módulo</th>
+          <th>Tipo</th>
+          <th>Implantação</th>
+          <th>MRR</th>
+        </tr></thead>
+        <tbody id="ptbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="projeto-card" style="display:none">
+    <div class="ch"><div class="ci purple">🔨</div><div><div class="ct">Suite Projeto — Horas de Desenvolvimento</div><div class="cs">Orçamento por hora técnica — valor padrão R$ 275/h</div></div></div>
+    <div class="cb">
+      <div class="g3">
+        <div class="field">
+          <label>Quantidade de Horas</label>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button class="ubtn" onclick="changeHoras(-5)">−</button>
+            <input type="number" id="projHoras" value="10" min="1" oninput="calc()" style="text-align:center;font-size:16px;font-weight:700">
+            <button class="ubtn" onclick="changeHoras(5)">+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Valor por Hora (R$)</label>
+          <input type="number" id="projValHora" value="275" min="150" oninput="calc()" placeholder="275">
+          <div id="proj-hora-alert" style="font-size:10px;color:var(--muted);margin-top:3px">Padrão: R$ 275/h · Mínimo: R$ 150/h</div>
+        </div>
+        <div class="field">
+          <label>Total do Projeto</label>
+          <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--primary)" id="projTotal">R$ 2.590</div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Descrição do Trabalho</label>
+        <textarea id="projDesc" rows="3" placeholder="Descreva brevemente o escopo das horas..."></textarea>
+      </div>
+      <div id="proj-min-alert" class="alert warn" style="margin-top:10px;display:none">
+        <span>⚠️</span><span>Valor hora abaixo do mínimo de custo (R$ 150/h). O projeto ficará com margem negativa.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ci warn">👥</div><div><div class="ct">Usuários Nomeados</div><div class="cs">Named User — escala progressiva de preços</div></div></div>
+    <div class="cb">
+      <div class="users-box">
+        <div class="users-ctrl">
+          <button class="ubtn" onclick="changeU(-1)">−</button>
+          <input type="number" id="uQty" value="0" min="0" max="99" oninput="calc()">
+          <button class="ubtn" onclick="changeU(1)">+</button>
+        </div>
+        <div class="u-unit">
+          <div class="u-price" id="uUnitPrice">R$ 99</div>
+          <div class="u-label">por usuário/mês</div>
+          <div id="uTierLbl" style="font-size:10px;color:var(--muted);margin-top:1px">1–4 usuários</div>
+        </div>
+        <div class="u-total">
+          <div class="u-totalval" id="uTotalMRR">R$ 99</div>
+          <div class="u-totallbl">MRR usuários</div>
+        </div>
+      </div>
+      <div class="alert info" style="margin-top:8px">
+        <span>ℹ️</span>
+        <span>Escala: 1–4 → R$99 · 5–9 → R$79 · 10–19 → R$69 · 20–39 → R$64 · 40–59 → R$57 · 60–79 → R$49 · 80+ → R$39/usuário</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ci purple">⚙️</div><div><div class="ct">Desenvolvimento & Sustentação</div><div class="cs">Pacote mensal ou sob demanda</div></div></div>
+    <div class="cb">
+      <label>Opção de Desenvolvimento</label>
+      <div class="dev-select-wrap">
+        <div class="dev-opt" id="dev-NAO" onclick="setDev('NAO')">
+          <div class="dev-opt-lbl">NÃO</div>
+          <div class="dev-opt-val">Sob demanda</div>
+        </div>
+        <div class="dev-opt active" id="dev-SIM" onclick="setDev('SIM')">
+          <div class="dev-opt-lbl">SIM</div>
+          <div class="dev-opt-val">+R$ 750/mês</div>
+        </div>
+        <div class="dev-opt" id="dev-NAOSE" onclick="setDev('NAOSE')">
+          <div class="dev-opt-lbl">Não se aplica</div>
+          <div class="dev-opt-val">R$ 0</div>
+        </div>
+        <div class="dev-opt" id="dev-HORA" onclick="setDev('HORA')">
+          <div class="dev-opt-lbl">Hora Avulsa</div>
+          <div class="dev-opt-val">R$ 275/h</div>
+        </div>
+      </div>
+      <div id="dev-obs" class="alert info" style="margin-top:10px">
+        <span>📦</span><span>Pacote Mensal: inclusão de 5 horas de desenvolvimento com valor-hora reduzido (50%). Custo: <strong>R$ 750/mês</strong>.</span>
+      </div>
+
+      <div class="divider"></div>
+      <label>Sustentação Mensal</label>
+      <div id="sust-base-card" style="margin-top:6px;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-weight:600;font-size:13px">Sustentação Base</div>
+          <div style="font-size:11px;color:var(--muted)">Suporte + Qlik Sense + Treinamentos</div>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--teal)">R$ 799/mês</div>
+      </div>
+      <div id="sust-cross-msg" style="display:none;margin-top:6px;padding:10px 14px;background:rgba(10,181,160,.08);border:1.5px solid rgba(10,181,160,.25);border-radius:9px;font-size:12px;color:var(--teal)">
+        ✓ Sustentação Base já inclusa no contrato vigente
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ci green">🏷️</div><div><div class="ct">Descontos</div><div class="cs">Política comercial — faixas de autorização</div></div></div>
+    <div class="cb">
+      <div class="g3">
+        <div class="field"><label>Desc. Implantação (%)</label><input type="number" id="dImpl" value="0" min="0" max="100" step="1" oninput="calc()"></div>
+        <div class="field"><label>Desc. MRR (%)</label><input type="number" id="dMRR" value="0" min="0" max="100" step="1" oninput="calc()"></div>
+        <div class="field"><label>Motivo</label><input type="text" id="dReason" placeholder="Ex: Cliente parceiro"></div>
+      </div>
+      <div style="margin-top:10px">
+        <span id="dfx-impl" class="dfx ok">✅ Implantação: Consultor</span>
+        <span id="dfx-mrr" class="dfx ok">✅ MRR: Consultor</span>
+      </div>
+      <div id="disc-alert" style="display:none"></div>
+
+      <div class="divider" style="margin:14px 0"></div>
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)">Parcelamento da Implantação</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" id="parcelas-btns">
+        <button class="parcela-btn active" onclick="setParcelas(1)" data-p="1">À vista</button>
+        <button class="parcela-btn" onclick="setParcelas(2)" data-p="2">2×</button>
+        <button class="parcela-btn" onclick="setParcelas(3)" data-p="3">3×</button>
+        <button class="parcela-btn" onclick="setParcelas(4)" data-p="4">4×</button>
+        <button class="parcela-btn" onclick="setParcelas(5)" data-p="5">5×</button>
+        <button class="parcela-btn" onclick="setParcelas(6)" data-p="6">6×</button>
+      </div>
+      <div id="parcela-preview" style="margin-top:8px;font-size:12px;color:var(--muted)">Implantação cobrada integralmente à vista, sem juros.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div class="ci blue">📝</div><div><div class="ct">Observações da Proposta</div></div></div>
+    <div class="cb">
+      <textarea id="propNotes" placeholder="Condições especiais, prazo, escopo adicional..."></textarea>
+    </div>
+  </div>
+
+</div><div class="sidebar">
+
+  <div class="margin-panel no-print">
+    <div class="mp-title">📊 Análise de Margem</div>
+    <div class="mp-grid">
+      <div class="mp-box">
+        <div class="mp-box-lbl">ARR Proposta</div>
+        <div class="mp-box-val" id="mp-arr">R$ 0</div>
+        <div class="mp-box-sub">Impl. + MRR×12</div>
+      </div>
+      <div class="mp-box highlight">
+        <div class="mp-box-lbl">Lucratividade</div>
+        <div class="mp-box-val" id="mp-arr-min">—</div>
+        <div class="mp-box-sub" id="mp-arr-min-sub">% sobre receita</div>
+      </div>
+    </div>
+    <div class="mp-row"><span class="lbl">MRR Negociado</span><span class="val" id="mp-mrr-neg">R$ 0</span></div>
+    <div class="mp-row"><span class="lbl">MRR Mínimo</span><span class="val" id="mp-mrr-min">R$ 2.800</span></div>
+    <div class="mp-row"><span class="lbl">Implantação Negociada</span><span class="val" id="mp-impl-neg">R$ 0</span></div>
+    <div class="mp-row"><span class="lbl">Custo Base (mínimo)</span><span class="val" id="mp-impl-min">R$ 5.000</span></div>
+    <div class="sig-wrap">
+      <div class="sig-label">
+        <span id="mp-pct-lbl">Lucratividade</span>
+        <span id="mp-pct">—</span>
+      </div>
+      <div class="sig-bar"><div class="sig-fill" id="mp-bar" style="width:0%"></div></div>
+    </div>
+    <div id="mp-flag" class="mflag ok">✅ Dentro do mínimo</div>
+  </div>
+
+  <div class="card">
+    <div class="ch" style="background:var(--primary)">
+      <div style="color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;width:100%">
+        📋 Resumo do Orçamento
+        <div id="sb-cname" style="font-size:11px;opacity:.6;font-weight:400;margin-top:1px">—</div>
+      </div>
+    </div>
+
+    <div class="sval-block">
+      <div class="sval-title">Implantação</div>
+      <div id="impl-lines"><div style="text-align:center;padding:12px;color:var(--muted);font-size:12px">Selecione produtos</div></div>
+    </div>
+
+    <div style="padding:0 20px 16px">
+      <div class="sval-title">Recorrência Mensal (MRR)</div>
+      <div id="mrr-lines"><div style="text-align:center;padding:12px;color:var(--muted);font-size:12px">Selecione produtos</div></div>
+    </div>
+
+    <div class="grand-block">
+      <div class="grand-row">
+        <span class="grand-lbl">Implantação Final</span>
+        <span class="grand-val" id="gb-impl">R$ 0</span>
+      </div>
+      <div class="grand-sep" id="mrr-sep"></div>
+      <div class="grand-row" id="mrr-row">
+        <span class="grand-lbl">MRR Final</span>
+        <span class="grand-val" id="gb-mrr">R$ 0<span style="font-size:11px;font-weight:400;opacity:.6">/mês</span></span>
+      </div>
+      <div class="grand-sep"></div>
+      <div class="grand-row big">
+        <span class="grand-lbl" id="total-lbl">Total Contrato (12m)</span>
+        <span class="grand-val" id="gb-total">R$ 0</span>
+      </div>
+      <div class="grand-row arr" style="margin-top:8px" id="arr-row">
+        <span class="grand-lbl">ARR</span>
+        <span class="grand-val" id="gb-arr">R$ 0</span>
+      </div>
+    </div>
+
+    <div class="neg-grid">
+      <div class="neg-box"><div class="neg-num" id="neg-suites">0</div><div class="neg-lbl">Suítes</div></div>
+      <div class="neg-box"><div class="neg-num" id="neg-users">1</div><div class="neg-lbl">Usuários</div></div>
+      <div class="neg-box"><div class="neg-num" id="neg-addons">0</div><div class="neg-lbl">Telas Addon</div></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="gerarPDF()" style="flex:1">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Gerar Proposta PDF
+      </button>
+    </div>
+    <div class="actions" style="padding-top:0;border-top:none">
+      <button class="btn btn-ghost" onclick="limpar()" style="flex:1;font-size:11px">🔄 Limpar Tudo</button>
+      <button class="btn btn-teal" onclick="copiar()" id="btn-copiar" style="flex:1;font-size:11px">📋 Copiar Resumo</button>
+    </div>
+  </div>
+
+</div></div></div><div id="admin-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,18,30,.85);backdrop-filter:blur(6px);align-items:center;justify-content:center">
+
+  <div id="admin-login" style="background:#fff;border-radius:16px;padding:40px;width:360px;box-shadow:0 24px 80px rgba(0,0,0,.4)">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-family:'Chakra Petch',sans-serif;font-size:28px;font-weight:800;color:#0e2a5c;letter-spacing:2px">ADMIN</div>
+      <div style="font-size:12px;color:#7b8199;margin-top:4px">Administração de Preços — Sewe Group</div>
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#7b8199;display:block;margin-bottom:6px">Senha de acesso</label>
+      <input id="admin-pwd-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdminPwd()"
+        style="width:100%;padding:12px 14px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box;transition:border .2s"
+        onfocus="this.style.borderColor='#0e2a5c'" onblur="this.style.borderColor='#e5e7eb'">
+      <div id="admin-pwd-err" style="color:#dc2626;font-size:11px;margin-top:6px;display:none">Senha incorreta. Tente novamente.</div>
+    </div>
+    <button onclick="checkAdminPwd()" style="width:100%;padding:13px;background:#0e2a5c;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px">ENTRAR</button>
+    <button onclick="fecharAdmin()" style="width:100%;padding:10px;background:transparent;color:#7b8199;border:none;font-size:12px;cursor:pointer;margin-top:8px">Cancelar</button>
+  </div>
+
+  <div id="admin-panel" style="display:none;background:#f5f6fa;border-radius:16px;width:96vw;max-width:1100px;max-height:92vh;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);flex-direction:column">
+
+    <div style="background:#0e2a5c;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:2px">ADMIN</div>
+        <div style="background:rgba(10,181,160,.2);border:1px solid #0ab5a0;color:#0ab5a0;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:1px">TABELA DE PREÇOS</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button onclick="salvarAdmin()" style="background:#0ab5a0;color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px">💾 SALVAR ALTERAÇÕES</button>
+        <button onclick="resetarAdmin()" style="background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.3);padding:9px 16px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer">↩ Restaurar Padrão</button>
+        <button onclick="fecharAdmin()" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:none;width:34px;height:34px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+      </div>
+    </div>
+
+    <div id="admin-tabs" style="background:#fff;border-bottom:2px solid #e5e7eb;display:flex;gap:0;flex-shrink:0;overflow-x:auto"></div>
+
+    <div id="admin-content" style="overflow-y:auto;flex:1;padding:24px 28px"></div>
+
+    <div style="background:#fff;border-top:1px solid #e5e7eb;padding:12px 28px;font-size:11px;color:#7b8199;flex-shrink:0">
+      ⚠️ As alterações são salvas localmente neste navegador. Formato: <code style="background:#f0f2f8;padding:1px 5px;border-radius:3px">NL = [Implantação, MRR/mês] &nbsp;·&nbsp; CR = [Implantação, MRR/mês]</code>
+      &nbsp;&nbsp;|&nbsp;&nbsp; NL = New Logo &nbsp;·&nbsp; CR = Cross/Upsell
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
