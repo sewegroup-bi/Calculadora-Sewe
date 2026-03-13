@@ -1,83 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora Comercial — Sewe Group BI</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Chakra+Petch:wght@700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Comercial — Sewe Group BI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Sora:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="hdr">
-  <div class="hdr-logo">
-    <div class="hdr-mark">S</div>
-    <div>
-      <div class="hdr-name">SEWE GROUP <span>BI</span></div>
-      <div style="color:#0ab5a0;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase">Inteligência no seu negócio!</div>
+    <div class="hdr">
+        <div class="hdr-logo"><div class="hdr-mark">S</div><div class="hdr-name">SEWE GROUP <span>BI</span></div></div>
+        <div class="hdr-pill">CALCULADORA COMERCIAL</div>
     </div>
-  </div>
-  <div class="hdr-pill">CALCULADORA COMERCIAL</div>
-</div>
-
-<div class="page">
-  <div class="main-grid">
-    <div class="left-col">
-      <div class="card">
-        <div class="ch"><div class="ct">Dados do Cliente</div></div>
-        <div class="cb">
-          <input type="text" id="cName" placeholder="Nome do Cliente" oninput="calc()">
-          <div class="type-wrap">
-            <div class="type-btn active" id="tb-NEWLOGO" onclick="setType('NEWLOGO')"><div class="type-tag">New Logo</div></div>
-            <div class="type-btn" id="tb-CROSS" onclick="setType('CROSS')"><div class="type-tag">Cross/Upsell</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="ch"><div class="ct">Usuários (Cotas de 50)</div></div>
-        <div class="cb">
-          <div class="users-box">
-            <div class="users-ctrl">
-              <button class="ubtn" onclick="changeU(-1)">-</button>
-              <input type="number" id="uQty" value="1" oninput="calc()">
-              <button class="ubtn" onclick="changeU(1)">+</button>
+    <div class="page">
+        <div class="main-grid">
+            <div class="left-col">
+                <div class="card">
+                    <div class="ch"><div class="ct">Dados do Cliente</div></div>
+                    <div class="cb">
+                        <input type="text" id="cName" placeholder="Nome do Cliente" oninput="calc()">
+                        <div class="g2" style="margin-top:10px"><input type="text" placeholder="Contato"><input type="text" placeholder="Consultor"></div>
+                        <input type="date" id="cDate" style="margin-top:10px">
+                        <div class="type-wrap">
+                            <div class="type-btn active" id="tb-NEWLOGO" onclick="setType('NEWLOGO')">New Logo</div>
+                            <div class="type-btn" id="tb-CROSS" onclick="setType('CROSS')">Cross/Upsell</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="ch"><div class="ct">Suítes & Produtos</div></div>
+                    <div class="cb">
+                        <div class="suite-grid">
+                            <div class="suite-btn sel" id="sb-COMERCIAL" onclick="setSuite('COMERCIAL')">Comercial</div>
+                            <div class="suite-btn" id="sb-FINANCEIRA" onclick="setSuite('FINANCEIRA')">Financeira</div>
+                            <div class="suite-btn" id="sb-SUPRIMENTOS" onclick="setSuite('SUPRIMENTOS')">Suprimentos</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div id="tier-tabs-wrap"></div>
+                        <table class="ptable"><tbody id="ptbody"></tbody></table>
+                    </div>
+                </div>
+                <div class="card" id="projeto-card" style="display:none">
+                    <div class="cb"><div class="g3">
+                        <input type="number" id="projHoras" value="10" oninput="calc()"><input type="number" id="projValHora" value="275" oninput="calc()"><div id="projTotal" style="font-weight:bold">R$ 0</div>
+                    </div></div>
+                </div>
+                <div class="card">
+                    <div class="ch"><div class="ct">Usuários (Pacotes de 50)</div></div>
+                    <div class="cb">
+                        <div class="users-box">
+                            <div class="users-ctrl"><button class="ubtn" onclick="changeU(-1)">-</button><input type="number" id="uQty" value="1" oninput="calc()"><button class="ubtn" onclick="changeU(1)">+</button></div>
+                            <div class="u-unit"><div class="u-price">Incluso</div><div class="u-label">na Sustentação</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="ch"><div class="ct">Sustentação</div></div>
+                    <div class="cb">
+                        <div id="sust-base-card" style="display:flex;justify-content:space-between;align-items:center">
+                            <span>Sustentação + Licenciamento</span>
+                            <span id="sust-val-display" style="font-weight:bold;color:var(--teal);font-size:18px">R$ 799,00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card"><div class="cb"><div class="g2"><input type="number" id="dImpl" placeholder="Desc. Impl. %" oninput="calc()"><input type="number" id="dMRR" placeholder="Desc. MRR %" oninput="calc()"></div></div></div>
             </div>
-            <div class="u-unit">
-              <div class="u-price">Incluso</div>
-              <div class="u-label">na Sustentação</div>
+            <div class="sidebar">
+                <div class="margin-panel"><div class="mp-title">ARR PROPOSTA</div><div class="mp-box-val" id="mp-arr">R$ 0</div><div class="sig-bar"><div class="sig-fill" id="mp-bar" style="width:100%"></div></div></div>
+                <div class="card">
+                    <div class="ch" style="background:var(--primary);color:#fff"><div class="ct" style="color:#fff">📋 Resumo</div></div>
+                    <div class="sval-block"><div class="sval-title">Implantação</div><div id="impl-lines"></div></div>
+                    <div class="sval-block"><div class="sval-title">MRR</div><div id="mrr-lines"></div></div>
+                    <div class="grand-block">
+                        <div class="grand-row"><span>Implantação Final</span><span id="gb-impl" class="grand-val">R$ 0</span></div>
+                        <div class="grand-row"><span>MRR Final</span><span id="gb-mrr" class="grand-val">R$ 0</span></div>
+                        <div class="grand-row big"><span>Total 12m</span><span id="gb-total" class="grand-val">R$ 0</span></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.print()">Gerar PDF</button>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="ch"><div class="ct">Sustentação & Licenciamento</div></div>
-        <div class="cb">
-          <div id="sust-base-card" style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div style="font-weight:600">Sustentação Base + Usuários</div>
-              <div style="font-size:11px;color:var(--muted)">Suporte + Qlik + Cota de 50 Users</div>
-            </div>
-            <div id="sust-val-display" style="font-weight:bold;color:var(--teal);font-size:18px">R$ 799,00</div>
-          </div>
-        </div>
-      </div>
     </div>
-
-    <div class="sidebar">
-      <div class="card">
-        <div class="ch" style="background:var(--primary);color:#fff"><div class="ct" style="color:#fff">📋 Resumo</div></div>
-        <div class="cb">
-          <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>Implantação:</span><span id="gb-impl" style="font-weight:700">R$ 0,00</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>MRR:</span><span id="gb-mrr" style="font-weight:700">R$ 0,00</span></div>
-          <hr style="margin:15px 0;border:0;border-top:1px solid var(--border)">
-          <div id="gb-total" style="font-family:Sora;font-size:18px;font-weight:800;text-align:center;color:var(--primary)">Total: R$ 0,00</div>
-          <button class="btn btn-primary" style="margin-top:20px" onclick="window.print()">Gerar PDF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
