@@ -111,7 +111,6 @@ function calc(){
   const dImpl  = Math.max(0,Math.min(100,parseFloat(document.getElementById('dImpl').value)||0));
   const dMRR   = Math.max(0,Math.min(100,parseFloat(document.getElementById('dMRR').value)||0));
 
-  // Multiplicadores do Desconto Líquido
   const fImpl = 1 - (dImpl/100);
   const fMRR  = 1 - (dMRR/100);
 
@@ -210,7 +209,6 @@ function calc(){
   if (document.getElementById('gb-arr')) document.getElementById('gb-arr').textContent  = f(grandTotal);
   if (document.getElementById('sb-cname')) document.getElementById('sb-cname').textContent = document.getElementById('cName').value||'—';
 
-  // EXIBE DESCONTOS INDIVIDUAIS NA BARRA LATERAL
   let ih='', mh='';
   prods.filter(p=>p.impl>0).forEach(p=> {
       const vGross = p.impl; const vNet = vGross * fImpl;
@@ -241,7 +239,7 @@ function calc(){
 }
 
 // ═══════════════════════════════════════════════════
-//  GERA O PDF (AGORA COM DESCONTOS EM CADA LINHA)
+//  GERA O PDF DA PROPOSTA OFICIAL (DOCUMENTO EXTERNO)
 // ═══════════════════════════════════════════════════
 function gerarPDF(){
   const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
@@ -262,7 +260,6 @@ function gerarPDF(){
   const dMRR    = parseFloat(document.getElementById('dMRR').value) || 0;
   const dReason = document.getElementById('dReason') ? document.getElementById('dReason').value : '';
   
-  // Fatores de Desconto
   const fImpl = 1 - (dImpl/100);
   const fMRR  = 1 - (dMRR/100);
 
@@ -292,7 +289,6 @@ function gerarPDF(){
   const suiteName = {COMERCIAL:'Comercial',FINANCEIRA:'Financeira',SUPRIMENTOS:'Suprimentos',BENEFICIOS:'Benefícios',POSVENDA:'Pós-Venda'};
   const suiteColor= {COMERCIAL:'#dbeafe|#1d4ed8',FINANCEIRA:'#d1fae5|#065f46',SUPRIMENTOS:'#ede9fe|#6d28d9',BENEFICIOS:'#fee2e2|#b91c1c',POSVENDA:'#fef3c7|#92400e'};
 
-  // Tabela de Produtos no PDF (Com desconto em cada linha)
   const prodRows = prods.map(p=>{
     const sc = p.suite ? suiteColor[p.suite]||'#f3f4f6|#374151' : '';
     const [bg,fg] = sc ? sc.split('|') : ['#f3f4f6','#374151'];
