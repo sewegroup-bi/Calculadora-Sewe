@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposta Comercial - Sewe Group</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Sora:wght@700;800&family=Chakra+Petch:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f0f2f8; font-family: 'Inter', sans-serif; color: #1a1d2e; margin: 0; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 40px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    .doc-page { width: 100%; max-width: 1000px; background: #fff; border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.15); overflow: hidden; position: relative; min-height: 700px; margin: 0 auto; }
+    
+    .capa { background: linear-gradient(135deg, #0a1628 0%, #0d2137 55%, #082028 100%); display: flex; flex-direction: column; justify-content: space-between; }
+    .capa-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 10% 60%, rgba(10,181,160,.18) 0%, transparent 55%), radial-gradient(ellipse at 90% 10%, rgba(10,60,120,.28) 0%, transparent 50%); }
+    .capa-s { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: 'Chakra Petch', sans-serif; font-size: 480px; font-weight: 800; color: rgba(10,181,160,.07); line-height: 1; pointer-events: none; user-select: none; letter-spacing: -10px; }
+    .capa-top { position: relative; z-index: 2; padding: 40px 50px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-s { font-family: 'Chakra Petch', sans-serif; font-size: 32px; font-weight: 800; color: #0ab5a0; border: 2.5px solid #0ab5a0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 8px; flex-shrink: 0; }
+    .logo-nome { color: #fff; font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 3px; line-height: 1.1; }
+    .logo-tag  { color: #0ab5a0; font-size: 8px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+    .capa-data { color: rgba(255,255,255,.45); font-size: 13px; }
+    .capa-mid { position: relative; z-index: 2; padding: 100px 50px; }
+    .capa-barra { width: 4px; height: 60px; background: #0ab5a0; margin-bottom: 20px; border-radius: 2px; }
+    .capa-tipo  { color: #0ab5a0; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+    .capa-titulo { color: #fff; font-family: 'Sora', sans-serif; font-size: 54px; font-weight: 800; line-height: 1.05; margin-bottom: 10px; }
+    .capa-cliente { color: rgba(255,255,255,.65); font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .capa-bottom { position: relative; z-index: 2; padding: 24px 50px; border-top: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: center; }
+    .capa-validade { color: rgba(255,255,255,.4); font-size: 11px; }
+    .capa-consult  { color: rgba(255,255,255,.6); font-size: 12px; text-align: right; }
+    .capa-consult strong { color: #fff; display: block; font-size: 14px; margin-bottom: 2px; }
+
+    .pagina { padding: 40px 50px; }
+    .pagina-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 2px solid #0e2a5c; margin-bottom: 24px; }
+    .ph-right { text-align: right; font-size: 11px; color: #7b8199; }
+    .ph-right strong { font-size: 14px; font-weight: 700; color: #0e2a5c; display: block; }
+    .logo-s-sm { font-family: 'Chakra Petch', sans-serif; font-size: 20px; font-weight: 800; color: #0ab5a0; border: 2px solid #0ab5a0; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+    .cliente-box { background: #f5f6fa; border-radius: 10px; padding: 16px 20px; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; border-left: 4px solid #0e2a5c; }
+    .cb-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7b8199; display: block; margin-bottom: 4px; }
+    .cb-val   { font-size: 15px; font-weight: 700; color: #0e2a5c; }
+    .rodape { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #e5e7eb; margin-top: 24px; font-size: 11px; color: #aaa; }
+    .rodape-logo { font-family: 'Chakra Petch', sans-serif; font-size: 13px; font-weight: 700; color: #0e2a5c; letter-spacing: 1px; }
+
+    .arte { background: #0a1628; color: #fff; padding-bottom: 30px; }
+    .arte-s { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: 'Chakra Petch', sans-serif; font-size: 460px; font-weight: 800; color: rgba(10,181,160,.05); line-height: 1; pointer-events: none; user-select: none; }
+    .arte-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 50px; border-bottom: 1px solid rgba(255,255,255,.07); position: relative; z-index: 1; }
+    .arte-badge { background: rgba(10,181,160,.15); border: 1px solid rgba(10,181,160,.4); color: #0ab5a0; font-size: 10px; font-weight: 700; padding: 6px 16px; border-radius: 20px; letter-spacing: .8px; text-transform: uppercase; }
+    .arte-hl { padding: 24px 50px 16px; position: relative; z-index: 1; }
+    .arte-bar { width: 4px; height: 40px; background: #0ab5a0; margin-bottom: 12px; border-radius: 2px; }
+    .arte-titulo { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+    .arte-teal { color: #0ab5a0; }
+    .arte-sub  { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.5; max-width: 600px; }
+    .arte-stats { display: flex; align-items: center; background: rgba(10,181,160,.1); border-top: 1px solid rgba(10,181,160,.2); border-bottom: 1px solid rgba(10,181,160,.2); padding: 16px 50px; position: relative; z-index: 1; }
+    .arte-stat { text-align: center; flex: 1; }
+    .arte-stat-n { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; color: #0ab5a0; line-height: 1; }
+    .arte-stat-l { font-size: 9px; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; font-weight: 600; }
+    .arte-div    { width: 1px; height: 36px; background: rgba(255,255,255,.15); flex-shrink: 0; }
+    .arte-slabel { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 2.5px; color: rgba(10,181,160,.8); padding: 16px 50px 10px; display: flex; align-items: center; gap: 8px; position: relative; z-index: 1; }
+    .arte-slabel::before { content: ''; width: 16px; height: 2px; background: #0ab5a0; border-radius: 1px; flex-shrink: 0; }
+    .arte-difs { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: rgba(255,255,255,.08); margin: 0 50px; border-radius: 12px; overflow: hidden; position: relative; z-index: 1; }
+    .arte-dif { background: #0d2137; padding: 16px 20px; }
+    .arte-dif-icon  { font-size: 20px; margin-bottom: 6px; display: block; }
+    .arte-dif-title { font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+    .arte-dif-text  { font-size: 11px; color: rgba(255,255,255,.5); line-height: 1.5; }
+    .arte-impacts { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 0 50px; position: relative; z-index: 1; }
+    .arte-impact { background: linear-gradient(135deg,#0ab5a0,#0890a0); border-radius: 12px; padding: 16px; text-align: center; }
+    .arte-impact-n { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; color: #fff; line-height: 1; }
+    .arte-impact-l { font-size: 9px; color: rgba(0,0,0,.45); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; font-weight: 700; }
+    .arte-clients  { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 50px; position: relative; z-index: 1; }
+    .arte-footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; margin-top: 20px; background: rgba(10,181,160,.1); border-top: 1px solid rgba(10,181,160,.25); position: relative; z-index: 1; }
+    .arte-footer-cta     { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .arte-footer-contact { display: flex; gap: 16px; font-size: 11px; color: rgba(255,255,255,.55); }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th { background: #0e2a5c; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 14px 16px; text-align: left; }
+    td { padding: 14px 16px; border-bottom: 1px solid #e5e7eb; font-size: 13px; }
+
+    @media(max-width: 800px) {
+      body { padding: 16px; gap: 16px; }
+      .doc-page { min-height: auto; border-radius: 8px; }
+      .capa-s { font-size: 200px; }
+      .capa-titulo { font-size: 36px; }
+      .capa-top, .capa-bottom { padding: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .capa-mid { padding: 40px 20px; }
+      .pagina { padding: 20px; }
+      .cliente-box { grid-template-columns: 1fr; gap: 10px; }
+      .arte-header, .arte-hl, .arte-slabel, .arte-clients, .arte-footer { padding-left: 20px; padding-right: 20px; }
+      .arte-stats { padding: 20px; flex-direction: column; gap: 16px; background: transparent; border: none; }
+      .arte-div { display: none; }
+      .arte-difs { grid-template-columns: 1fr; margin: 0 20px; gap: 8px; background: transparent; }
+      .arte-dif { border-radius: 8px; }
+      .arte-impacts { grid-template-columns: 1fr; margin: 0 20px; }
+      .arte-footer { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .arte-footer-contact { flex-direction: column; gap: 8px; }
+      th, td { font-size: 11px; padding: 10px; }
+      .neg-grids { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 40px;">
+    <div style="font-family: 'Sora', sans-serif; text-align: center; margin-top: 50px; color: #0e2a5c;">⏳ Descompactando proposta segura...</div>
+  </div>
+
+  <script>
+    function f(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+
+    const params = new URLSearchParams(window.location.search);
+    const dataParam = params.get('data');
+
+    if (!dataParam) {
+      document.getElementById('app').innerHTML = '<div style="padding: 50px; text-align: center; font-family: Sora; color: #ef4444;">⚠️ Link de proposta inválido ou corrompido.</div>';
+    } else {
+      try {
+        const jsonStr = decodeURIComponent(escape(atob(dataParam)));
+        const d = JSON.parse(jsonStr);
+
+        const fImpl = 1 - (d.dImpl/100);
+        const fMRR  = 1 - (d.dMRR/100);
+
+        let pacotesCobrados = d.type === 'NEWLOGO' ? d.qtdPacotes : Math.max(0, d.qtdPacotes - 1);
+        const sustVal = pacotesCobrados * 799;
+
+        let implGross = 0, mrrProds = 0;
+        d.prods.forEach(p => { implGross += p.impl; mrrProds += p.mrr; });
+        const projImplGross = d.projHoras * d.projValHora;
+        implGross += projImplGross;
+
+        const mrrGross = d.isProjeto ? 0 : (mrrProds + sustVal + d.devMRR);
+        const implFinal = implGross * fImpl;
+        const mrrFinal  = mrrGross * fMRR;
+
+        const dateStr = d.cdate ? new Date(d.cdate+'T00:00:00').toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
+        
+        const suiteName = {COMERCIAL:'Comercial',FINANCEIRA:'Financeira',SUPRIMENTOS:'Suprimentos',BENEFICIOS:'Benefícios',POSVENDA:'Pós-Venda'};
+        const suiteColor= {COMERCIAL:'#dbeafe|#1d4ed8',FINANCEIRA:'#d1fae5|#065f46',SUPRIMENTOS:'#ede9fe|#6d28d9',BENEFICIOS:'#fee2e2|#b91c1c',POSVENDA:'#fef3c7|#92400e'};
+
+        const prodRows = d.prods.map(p=>{
+          const sc = p.suite ? suiteColor[p.suite]||'#f3f4f6|#374151' : '';
+          const [bg,fg] = sc ? sc.split('|') : ['#f3f4f6','#374151'];
+          const tag = p.suite ? `<span style="background:${bg};color:${fg};font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;text-transform:uppercase;margin-right:8px">${suiteName[p.suite]||p.suite}</span>` : '';
+          const typetag = `<span style="background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd;font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;margin-left:6px">${p.isAddon?'Add-on':'Core'}</span>`;
+          const implHtml = p.impl > 0 ? (d.dImpl > 0 ? `<del style="font-size:10px;color:#999;display:block">${f(p.impl)}</del>${f(p.impl * fImpl)}` : f(p.impl)) : '—';
+          const mrrHtml = p.mrr > 0 ? (d.dMRR > 0 ? `<del style="font-size:10px;color:#999;display:block">${f(p.mrr)}</del>${f(p.mrr * fMRR)}` : f(p.mrr)) : '—';
+          return `<tr><td>${tag}${p.name}${typetag}</td><td style="text-align:right; font-weight: 600;">${implHtml}</td><td style="text-align:right; font-weight: 600;">${mrrHtml}<span style="font-size:10px; font-weight: normal;">/mês</span></td></tr>`;
+        }).join('');
+
+        let lblSustentacao = d.type === 'NEWLOGO' ? `Sustentação Base & Licenciamento (${pacotesCobrados}x pct p/ até ${pacotesCobrados*50} usuários)` : `Sustentação Adicional (${pacotesCobrados}x pct extra p/ +${pacotesCobrados*50} usuários)`;
+        if(d.type === 'CROSS' && pacotesCobrados === 0){ lblSustentacao = `Licenciamento & Sustentação (Cota inicial de 50 usuários Cross inclusa)`; }
+
+        const sustValHtml = sustVal > 0 ? (d.dMRR > 0 ? `<del style="font-size:10px;color:#999;display:block">${f(sustVal)}</del>${f(sustVal * fMRR)}` : f(sustVal)) : 'R$ 0,00';
+        const devValHtml = d.devMRR > 0 ? (d.dMRR > 0 ? `<del style="font-size:10px;color:#999;display:block">${f(d.devMRR)}</del>${f(d.devMRR * fMRR)}` : f(d.devMRR)) : 'R$ 0,00';
+
+        const infraRows = `
+          <tr style="background:#fafbfc"><td style="color:#555;font-size:12px">${lblSustentacao}</td><td style="text-align:right;color:#555;">—</td><td style="text-align:right;color:#555;font-weight: 600;">${sustValHtml}<span style="font-size:10px;font-weight: normal;">/mês</span></td></tr>
+          ${d.devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:12px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;">—</td><td style="text-align:right;color:#555;font-weight: 600;">${devValHtml}<span style="font-size:10px;font-weight: normal;">/mês</span></td></tr>` : ''}
+          ${d.dReason ? `<tr><td style="color:#dc2626;font-size:11px" colspan="3">Motivo do Desconto: ${d.dReason}</td></tr>` : ''}`;
+
+        const parcelasAtuais = d.parcelas || 1;
+        const parcelaTexto = parcelasAtuais === 1 ? 'À vista — 7 dias após assinatura' : `${parcelasAtuais}× de ${f(implFinal/parcelasAtuais)} sem juros`;
+
+        let bodyHTML = '';
+        if(d.isProjeto){
+          const projFinal = projImplGross*fImpl;
+          bodyHTML = `
+            <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:24px 30px;margin-bottom:24px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px; flex-wrap: wrap;">
+                <div><div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:#0e2a5c">🔨 Desenvolvimento Sewe Group</div><div style="font-size:14px;color:#555;margin-top:6px">${d.projHoras} horas × R$ ${d.projValHora}/h</div>${d.projDesc?`<div style="font-size:13px;color:#444;margin-top:16px;padding-top:16px;border-top:1px solid #d1fae5;line-height:1.6"><strong>Escopo:</strong><br>${d.projDesc}</div>`:''}</div>
+                <div style="text-align:right;flex-shrink:0">${d.dImpl>0?`<div style="font-size:13px;color:#dc2626; margin-bottom:4px;">Desconto ${d.dImpl}%: −${f(projImplGross*d.dImpl/100)}</div>`:''}<div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:#0e2a5c">${f(projFinal)}</div></div>
+              </div>
+            </div>
+            <div style="background:#0e2a5c;border-radius:12px;padding:24px 30px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap: wrap; gap: 10px;"><div style="color:rgba(255,255,255,.6);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Investimento Total do Projeto</div><div style="font-family:'Sora',sans-serif;font-size:36px;font-weight:800;color:#fff">${f(projFinal)}</div></div>
+            <div style="background:#f8f9fc;border-radius:12px;padding:24px 30px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7b8199;margin-bottom:16px">CONDIÇÕES COMERCIAIS</div><div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px"><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">💳</span><div><strong style="display:block;color:#0e2a5c">Pagamento</strong>100% antecipado ou conforme contrato</div></div><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">📅</span><div><strong style="display:block;color:#0e2a5c">Prazo de Execução</strong>A definir após kick-off do projeto</div></div><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">⏱</span><div><strong style="display:block;color:#0e2a5c">Validade</strong>15 dias úteis</div></div><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">➕</span><div><strong style="display:block;color:#0e2a5c">Horas excedentes</strong>R$ 275/h com aprovação prévia</div></div></div></div>
+            ${d.notes?`<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:16px 20px;margin-top:20px;font-size:13px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#92400e;margin-bottom:8px">OBSERVAÇÕES</div>${d.notes.replace(/\n/g,'<br>')}</div>`:''}`;
+        } else {
+          bodyHTML = `
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#0e2a5c;margin-bottom:16px;display:flex;align-items:center;gap:12px">OFERTA NEGOCIADA<span style="flex:1;height:2px;background:#e5e7eb;display:block"></span></div>
+            <table>
+              <thead><tr><th style="background:#0e2a5c;color:#fff;">Solução</th><th style="background:#0e2a5c;color:#fff;text-align:right;">Implantação</th><th style="background:#0e2a5c;color:#fff;text-align:right;">Recorrência</th></tr></thead>
+              <tbody>
+                ${prodRows}${infraRows}
+                <tr style="background:#0e2a5c;"><td style="padding:16px;color:#fff;font-weight:700;font-size:14px"><strong>TOTAL LÍQUIDO</strong></td><td style="padding:16px;text-align:right;color:#0ab5a0;font-weight:700;font-size:16px;font-family:'Sora',sans-serif">${f(implFinal)}</td><td style="padding:16px;text-align:right;color:#0ab5a0;font-weight:700;font-size:16px;font-family:'Sora',sans-serif">${f(mrrFinal)}<span style="font-size:11px">/mês</span></td></tr>
+              </tbody>
+            </table>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px;margin-bottom:24px;" class="neg-grids">
+              <div style="background:#0e2a5c;border-radius:12px;padding:24px;text-align:center;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-bottom:8px">IMPLANTAÇÃO FINAL</div><div style="font-family:'Sora',sans-serif;font-size:34px;font-weight:800;color:#fff;line-height:1">${f(implFinal)}</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:8px">Cobrança única</div></div>
+              <div style="background:#0ab5a0;border-radius:12px;padding:24px;text-align:center;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.7);margin-bottom:8px">RECORRÊNCIA FINAL</div><div style="font-family:'Sora',sans-serif;font-size:34px;font-weight:800;color:#fff;line-height:1">${f(mrrFinal)}</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:8px">por mês</div></div>
+            </div>
+            <div style="background:#f8f9fc;border-radius:12px;padding:24px 30px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7b8199;margin-bottom:16px">CONDIÇÕES COMERCIAIS</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px"><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">💳</span><div><strong style="display:block;color:#0e2a5c">Pagamento Implantação</strong>${parcelaTexto}</div></div><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">🚀</span><div><strong style="display:block;color:#0e2a5c">Implantação</strong>Até 30 dias úteis após liberação do banco de dados</div></div><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">⏱</span><div><strong style="display:block;color:#0e2a5c">Validade</strong>15 dias úteis a partir desta data</div></div><div style="display:flex;gap:12px;font-size:13px;line-height:1.5"><span style="font-size:20px">🔄</span><div><strong style="display:block;color:#0e2a5c">Renovação</strong>Automática anual, salvo aviso 30 dias antes</div></div></div>
+            </div>
+            ${d.notes?`<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:16px 20px;margin-top:20px;font-size:13px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#92400e;margin-bottom:8px">OBSERVAÇÕES</div>${d.notes.replace(/\n/g,'<br>')}</div>`:''}`;
+        }
+
+        const clientesList = ['MULTISEG','TRANSOL','INTERSAT','PET LINE','PPA','KGMlan','MPE DISTRIBUIDORA','SEVENTH','ROUTE 66','PROPECUÁRIA','SECURICAM','GRUPO SERVSEG','FRAHM','SDE','BELLFONE','GLOBALVET','PET SOCIETY','MOCELIN'].map(c=>`<span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 12px;font-size:10px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase">${c}</span>`).join('');
+
+        document.getElementById('app').innerHTML = `
+          <div class="doc-page capa">
+            <div class="capa-bg"></div><div class="capa-s">S</div>
+            <div class="capa-top"><div class="logo"><div class="logo-s">S</div><div><div class="logo-nome">SEWE GROUP</div><div class="logo-tag">Inteligência no seu negócio!</div></div></div><div class="capa-data">${dateStr}</div></div>
+            <div class="capa-mid"><div class="capa-barra"></div><div class="capa-tipo">Proposta Comercial Digital</div><div class="capa-titulo">Sewe BI</div><div class="capa-cliente">${d.cname}</div></div>
+            <div class="capa-bottom"><div class="capa-validade">Válida por 15 dias úteis &bull; ${dateStr}</div><div class="capa-consult"><strong>${d.consult}</strong>Consultor Responsável</div></div>
+          </div>
+          <div class="doc-page pagina">
+            <div class="pagina-header"><div class="logo"><div class="logo-s-sm">S</div><div><div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:#0e2a5c;letter-spacing:2px">SEWE GROUP</div><div style="color:#0ab5a0;font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px">Inteligência no seu negócio!</div></div></div><div class="ph-right"><strong>Proposta Comercial — Sewe BI</strong>${dateStr} &bull; Válida 15 dias úteis</div></div>
+            <div class="cliente-box"><div><span class="cb-label">Cliente</span><span class="cb-val">${d.cname}</span></div><div><span class="cb-label">Contato</span><span class="cb-val">${d.contact}</span></div><div><span class="cb-label">Consultor Responsável</span><span class="cb-val">${d.consult}</span></div></div>
+            ${bodyHTML}
+            <div class="rodape"><span class="rodape-logo">SEWE GROUP</span><span>sewe@seweconsultoria.com.br &bull; +55 48 98470-4389</span></div>
+          </div>
+          <div class="doc-page arte">
+            <div class="arte-s">S</div>
+            <div class="arte-header"><div class="logo"><div class="logo-s" style="width:36px;height:36px;font-size:22px">S</div><div><div style="font-family:'Sora',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#fff">SEWE GROUP</div><div style="font-size:7px;color:#0ab5a0;letter-spacing:2px;text-transform:uppercase;margin-top:1px;font-weight:600">Inteligência no seu negócio!</div></div></div><div class="arte-badge">Por que fechar com a Sewe?</div></div>
+            <div class="arte-hl"><div class="arte-bar"></div><div class="arte-titulo">Mais de <span class="arte-teal">200 distribuidores</span><br>já tomam decisões com inteligência</div><div class="arte-sub">Desde 2020, ajudamos distribuidores de todo o Brasil a transformar dados em crescimento real.</div></div>
+            <div class="arte-stats"><div class="arte-stat"><div class="arte-stat-n">+200</div><div class="arte-stat-l">Clientes ativos</div></div><div class="arte-div"></div><div class="arte-stat"><div class="arte-stat-n">+3B</div><div class="arte-stat-l">em negócios/ano</div></div><div class="arte-div"></div><div class="arte-stat"><div class="arte-stat-n">+500</div><div class="arte-stat-l">Cidades atendidas</div></div><div class="arte-div"></div><div class="arte-stat"><div class="arte-stat-n">5 ★</div><div class="arte-stat-l">Google Reviews</div></div><div class="arte-div"></div><div class="arte-stat"><div class="arte-stat-n">100%</div><div class="arte-stat-l">Atendimento humano</div></div></div>
+            <div class="arte-slabel">NOSSOS DIFERENCIAIS</div>
+            <div class="arte-difs"><div class="arte-dif"><div class="arte-dif-icon">🏆</div><div class="arte-dif-title">Especialistas em Distribuidores</div><div class="arte-dif-text">Focados exclusivamente no seu mercado. KPIs, problemas e oportunidades do setor de distribuição.</div></div><div class="arte-dif"><div class="arte-dif-icon">⚡</div><div class="arte-dif-title">Qlik Sense — Líder Mundial</div><div class="arte-dif-text">Plataforma de BI líder global. Dashboards em tempo real, self-service analytics e alertas automáticos.</div></div><div class="arte-dif"><div class="arte-dif-icon">🚀</div><div class="arte-dif-title">Implantação em até 30 dias</div><div class="arte-dif-text">Do contrato ao primeiro dashboard em 30 dias úteis. Integração com ERP e suporte inclusos.</div></div><div class="arte-dif"><div class="arte-dif-icon">🧩</div><div class="arte-dif-title">Soluções Modulares</div><div class="arte-dif-text">Comece pelo que você precisa. Expanda com Comercial, Financeiro, Suprimentos, Pós-Venda e Benefícios.</div></div><div class="arte-dif"><div class="arte-dif-icon">🤝</div><div class="arte-dif-title">Customer Success Dedicado</div><div class="arte-dif-text">Suporte via WhatsApp, tickets internos, treinamento contínuo e CSM acompanhando sua evolução.</div></div><div class="arte-dif"><div class="arte-dif-icon">💡</div><div class="arte-dif-title">Classificado como OPEX</div><div class="arte-dif-text">Abate no IR. Expertise de time Sênior sem risco trabalhista, por uma fração do custo interno.</div></div></div>
+            <div class="arte-slabel" style="margin-top:20px">IMPACTO REAL NOS CLIENTES</div>
+            <div class="arte-impacts"><div class="arte-impact"><div class="arte-impact-n">98%</div><div class="arte-impact-l">mais precisão nas decisões</div></div><div class="arte-impact"><div class="arte-impact-n">50%</div><div class="arte-impact-l">menos tempo de resposta do gestor</div></div><div class="arte-impact"><div class="arte-impact-n">30%</div><div class="arte-impact-l">de redução de churn de clientes</div></div></div>
+            <div class="arte-slabel" style="margin-top:20px">QUEM JÁ CONFIA NA SEWE</div>
+            <div class="arte-clients">${clientesList}</div>
+            <div class="arte-footer"><div><div class="arte-footer-cta">Pronto para transformar dados em crescimento?</div><div class="arte-footer-contact"><span>📱 +55 48 98470-4389</span><span>✉️ sewe@seweconsultoria.com.br</span></div></div><div class="logo-s" style="width:40px;height:40px;font-size:26px">S</div></div>
+          </div>
+        `;
+      } catch(e) {
+        console.error(e);
+        document.getElementById('app').innerHTML = '<div style="padding: 50px; text-align: center; font-family: Sora; color: #ef4444;">⚠️ Erro ao carregar os dados da proposta.</div>';
+      }
+    }
+  </script>
+</body>
+</html>
