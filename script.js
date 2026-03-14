@@ -393,11 +393,11 @@ script, noscript, #print-trigger { display: none !important; }
 
 
 // ═══════════════════════════════════════════════════
-//  ADMIN SYSTEM (MANTER INTACTO)
+//  ADMIN SYSTEM (ATUALIZADO SEM ABA DE USUÁRIOS)
 // ═══════════════════════════════════════════════════
 const ADMIN_PWD   = 'sewe2026';
 const STORAGE_KEY = 'sewe_cat_v1';
-const STORAGE_USR = 'sewe_usr_v1';
+const STORAGE_MIN = 'sewe_min_v1';
 
 const SUITE_META = {
   COMERCIAL:   { label:'🛒 Comercial',   tiers:['SMART','SCALE','STRATEGIC','FOCO'] },
@@ -450,6 +450,7 @@ function renderAdminTabs(){
       ${meta.label}
     </button>
   `).join('')
+  // A aba de usuários foi removida daqui, ficando apenas a Política Comercial
   + `<button onclick="renderAdminRegras()" id="atab-REGRAS"
       style="padding:13px 22px;border:none;background:${adminSuite==='REGRAS'?'#f5f6fa':'#fff'};
       border-bottom:3px solid ${adminSuite==='REGRAS'?'#0e2a5c':'transparent'};
@@ -551,10 +552,65 @@ function pricePairFields(suite, tier, type, addonIdx, nlcr){
 function renderAdminRegras(){
   adminSuite='REGRAS';
   renderAdminTabs();
+  
   const politica = [
-    { num:'1', titulo:'VISÃO GERAL', cor:'#3b82f6', itens:[['', 'A Sewe Group oferece soluções de gestão baseadas em dados voltadas para distribuidores.']]},
-    { num:'2', titulo:'FLEXIBILIZAÇÃO COMERCIAL', cor:'#ef4444', itens:[['Até 15%', 'Autonomia do consultor — sem aprovação adicional.'],['15% a 35%', 'Requer aprovação do Diretor Comercial.'],['Acima de 35%', 'Requer aprovação do Comitê de Ofertas.']]}
+    { num:'1', titulo:'VISÃO GERAL', cor:'#3b82f6', itens:[
+      ['', 'A Sewe Group oferece soluções de gestão baseadas em dados voltadas para distribuidores, utilizando tecnologia SaaS (Software as a Service) para garantir padronização, escalabilidade e previsibilidade de entrega. Nossos produtos são vendidos como soluções modulares com escopo definido, permitindo que cada cliente evolua conforme sua maturidade de gestão e necessidade de análise.']
+    ]},
+    { num:'2', titulo:'ESTRUTURA DE OFERTAS (TIERS)', cor:'#8b5cf6', itens:[
+      ['SMART', 'Visibilidade e controle operacional. Distribuidores que estão iniciando a profissionalização e desejam controle de indicadores básicos e eliminação de planilhas.'],
+      ['SCALE', 'Crescimento e eficiência. Empresas que buscam interpretar os números, otimizar vendas, estoque e crédito, e crescer de forma sustentável.'],
+      ['STRATEGIC', 'Alta performance e rentabilidade. Gestores que necessitam de visão 360°, planejamento orçamentário e decisões baseadas em dados integrados.']
+    ]},
+    { num:'3', titulo:'MODALIDADES DE CONTRATAÇÃO', cor:'#0ab5a0', itens:[
+      ['3.1 New Logo', 'Clientes novos que não possuem nenhuma solução ativa na BU B.I. da Sewe Group. Inclui custos de implantação completa, recorrência mensal e eventuais add-ons.'],
+      ['3.2 Cross / Upsell', 'Clientes já ativos com outras suítes Sewe Group. Possuem condições diferenciadas de implantação e descontos progressivos em módulos adicionais.']
+    ]},
+    { num:'4', titulo:'COMPONENTES DE PREÇO', cor:'#f59e0b', itens:[
+      ['Implantação', 'Valor fixo único por contrato. Ativação do ambiente, configuração de dashboards e treinamentos iniciais.'],
+      ['Recorrência (MRR)', 'Cobrança mensal recorrente. Licenciamento de uso das suítes, suporte e sustentação mensal.'],
+      ['Composição da Recorrência', 'Pacote Unificado de Sustentação e Acesso: Engloba licenciamento acoplado da plataforma, pacote base de 50 usuários, treinamentos e suporte. Cobrança por pacote contratado (a cada 50 usuários).'],
+      ['Desenvolvimento', 'Ajustes e personalizações sob demanda. Incluso (5h/mês) ou sob demanda (hora técnica).'],
+      ['4.1 CNAEs Extras', 'A solicitação de inclusão de novos CNAEs terá o custo de R$ 100,00 por cada novo CNAE adicionado (taxa única de ativação). Não é permitida a substituição de um CNAE por outro.']
+    ]},
+    { num:'5', titulo:'FLEXIBILIZAÇÃO COMERCIAL', cor:'#ef4444', itens:[
+      ['0% a 15%', 'Consultor Comercial.'],
+      ['15% a 35%', 'Diretor Sewe.'],
+      ['Acima de 35%', 'Comitê de Ofertas.'],
+      ['Importante', 'Toda proposta deve garantir uma margem mínima de 0% na Calculadora. Ofertas abaixo disso devem ir ao Comitê de Ofertas.']
+    ]},
+    { num:'6', titulo:'REGRAS DE IMPLANTAÇÃO', cor:'#0e2a5c', itens:[
+      ['Prazo Padrão', 'Até 30 dias úteis após a liberação do banco de dados e pagamento da implantação.'],
+      ['Inclusões', 'Setup do ambiente Qlik Sense, parametrização de dashboards, treinamento e suporte inicial.'],
+      ['Fora do Escopo', 'Alterações não previstas serão tratadas como desenvolvimento sob demanda.']
+    ]},
+    { num:'7', titulo:'MODELO DE SUSTENTAÇÃO E ACESSO À PLATAFORMA', cor:'#0ab5a0', itens:[
+      ['O Pacote Cobre:', 'Licenciamento acoplado, Pacote com 50 usuários, Treinamento contínuo, Suporte técnico e Manutenção do Qlik Sense.'],
+      ['Regra de Comercialização', 'Não são mais negociados usuários avulsos. O acesso e a sustentação são trabalhados estritamente em blocos de 50 usuários. Acesso acima do pacote (ex: 55 usuários) requer adição de mais um Pacote de Sustentação.'],
+      ['Desenvolvimento Excedente', 'Horas que excederem o pacote mensal contratado serão faturadas pelo valor de R$ 250,00/hora.']
+    ]},
+    { num:'8', titulo:'POLÍTICA DE USUÁRIOS E BONIFICAÇÃO', cor:'#8b5cf6', itens:[
+      ['Alterações de Usuários', 'Dentro do limite do pacote, devem ser solicitadas por e-mail para grupo.cadastro@seweconsultoria.com.br.'],
+      ['8.1 Procedimento de Bonificação', 'O sistema não permite itens com valor R$ 0,00. Na bonificação de um pacote, o sistema aplicará um rateio do Valor Global do contrato entre todos os itens, gerando um preço médio.']
+    ]},
+    { num:'9', titulo:'CONDIÇÕES DE PAGAMENTO', cor:'#3b82f6', itens:[
+      ['Implantação', '100% antecipado ou parcelado em até 3x (1º vencimento 7 dias após assinatura).'],
+      ['Recorrência', 'Cobrança mensal via boleto e nota fiscal.'],
+      ['Inadimplência', 'Superior a 10 dias autoriza a suspensão imediata dos serviços.']
+    ]},
+    { num:'10', titulo:'RENOVAÇÃO E CANCELAMENTO', cor:'#f59e0b', itens:[
+      ['Renovação', 'Automática anual, salvo manifestação contrária com 30 dias de antecedência.'],
+      ['Cancelamento', 'Direito de arrependimento de 7 dias. Após isso, rescisão requer aviso prévio de 30 dias e multa de 20% sobre o saldo (após carência de 3 meses).']
+    ]},
+    { num:'11', titulo:'PARCERIAS E COMISSIONAMENTO', cor:'#0ab5a0', itens:[
+      ['Comissão', 'Calculada sobre o Valor Global do Contrato. Pagamento no mês subsequente à assinatura, conforme tabela do Comitê Comercial.']
+    ]},
+    { num:'12', titulo:'REVISÃO E GOVERNANÇA', cor:'#ef4444', itens:[
+      ['Revisão', 'Anualmente ou sempre que houver atualização significativa.'],
+      ['Responsável', 'Diretoria Comercial Sewe Group. Última atualização: 16/01/2026.']
+    ]}
   ];
+
   const secoes = politica.map(s => {
     const rows = s.itens.map(item => `<tr><td style="padding:11px 16px;font-size:11px;font-weight:700;color:#0e2a5c;border-bottom:1px solid #f0f2f8;width:200px">${item[0]}</td><td style="padding:11px 16px;font-size:12px;color:#374151;border-bottom:1px solid #f0f2f8">${item[1]}</td></tr>`).join('');
     return `<div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:16px"><div style="padding:14px 20px;border-left:4px solid ${s.cor};display:flex;align-items:center;gap:12px;background:#fafbfc;border-bottom:1px solid #e5e7eb"><span style="background:${s.cor};color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px">${s.num}</span><span style="font-family:Sora,sans-serif;font-size:13px;font-weight:800;color:#0e2a5c">${s.titulo}</span></div><table style="width:100%;border-collapse:collapse">${rows}</table></div>`;
