@@ -1,37 +1,14 @@
 // ═══════════════════════════════════════════════════
 //  DATA E CONFIGURAÇÕES ORIGINAIS
 // ═══════════════════════════════════════════════════
-const MINIMUMS = {
-  NEWLOGO:   { mrrMin: 2800, implMin: 5000, label: 'New Logo' },
-  NEWLOGOSH: { mrrMin: 1600, implMin: 5000, label: 'New Logo S/Hora' },
-  CROSS:     { mrrMin: 1600, implMin: 0,    label: 'Cross'    },
-};
+const MINIMUMS = { NEWLOGO: { mrrMin: 2800, implMin: 5000, label: 'New Logo' }, NEWLOGOSH: { mrrMin: 1600, implMin: 5000, label: 'New Logo S/Hora' }, CROSS: { mrrMin: 1600, implMin: 0, label: 'Cross' } };
 
 const CAT = {
-  COMERCIAL: {
-    SMART: { core: { name:'Smart Core', prods:['Dashboard Comercial','Diário de Vendas','Clientes','Mapa de Vendas','Comparativos','Produtos','Relatórios'], NL:[4999,1299], CR:[2999,1299] }, addons:[] },
-    SCALE: { core: { name:'Scale Core', prods:['Scale — pacote completo'], NL:[6999,1699], CR:[4999,1699] }, addons:[{name:'Mapa de Prospecção', NL:[999,199], CR:[999,199]},{name:'Correlação de Vendas', NL:[999,199], CR:[999,199]},{name:'Produtos e Oportunidades', NL:[999,199], CR:[999,199]},{name:'Variação Faturamento', NL:[999,199], CR:[999,199]},{name:'Cross Selling', NL:[999,199], CR:[999,199]}] },
-    STRATEGIC: { core: { name:'Strategic Core', prods:['Strategic — pacote completo'], NL:[9999,1999], CR:[6999,1849] }, addons:[{name:'Atendimento Carteira de Clientes', NL:[1999,299], CR:[1999,299]},{name:'Orçamento de Vendas', NL:[1999,299], CR:[1999,299]},{name:'Rentabilidade', NL:[1999,299], CR:[1999,299]},{name:'Informações Financeiras a Receber', NL:[1999,299], CR:[1999,299]}] },
-    FOCO: { core: { name:'Foco da Equipe', prods:['Foco da Equipe'], NL:[4999,1299], CR:[999,299] }, addons:[{name:'Foco da Equipe (Addon)', NL:[4999,1299], CR:[999,199]}] }
-  },
-  FINANCEIRA: {
-    SMART: { core: { name:'Smart Core', prods:['Dashboard Financeiro','Contas a Receber','Det. Contas a Receber','Contas a Pagar','Det. Contas a Pagar'], NL:[3999,1299], CR:[1999,1299] }, addons:[] },
-    SCALE: { core: { name:'Scale Core', prods:['Scale — pacote completo'], NL:[4999,1699], CR:[2999,1699] }, addons:[{name:'Avaliação Clientes', NL:[999,199], CR:[999,199]},{name:'Atrasos e Inadimplências', NL:[999,199], CR:[999,199]},{name:'Fluxo de Caixa', NL:[999,199], CR:[999,199]}] },
-    STRATEGIC: { core: { name:'Strategic Core', prods:['Strategic — pacote completo'], NL:[19999,2999], CR:[19999,2999] }, addons:[{name:'Orçamento Financeiro', NL:[9999,699], CR:[9999,699]},{name:'DRE', NL:[19999,999],CR:[19999,999]}] }
-  },
-  SUPRIMENTOS: {
-    SMART: { core: { name:'Smart Core', prods:['Estoque'], NL:[4999,1299], CR:[999,699] }, addons:[] },
-    SCALE: { core: { name:'Scale Core', prods:['Entradas','Aging Estoque','Rupturas'], NL:[3999,1699], CR:[1999,1699] }, addons:[] },
-    STRATEGIC: { core: { name:'Strategic Core', prods:['Dashboard Suprimentos','Excesso de Estoque','Rupturas Avançada','Estoque Desbalanceado','Necessidade de Transferências','Necessidade de Compras'], NL:[19999,2699], CR:[19999,2699] }, addons:[] }
-  },
-  BENEFICIOS: {
-    SMART: { core: { name:'Smart Core', prods:['Dashboard Benefícios','Regras','Rebates','Price Protection','Stock Rotation'], NL:[1999,1299], CR:[1999,949] }, addons:[] },
-    SCALE: { core: { name:'Scale Core', prods:['Scale — pacote completo'], NL:[1999,949], CR:[1999,949] }, addons:[] },
-    STRATEGIC: { core: { name:'Strategic Core', prods:['Validação Sellin','Validação Sellout'], NL:[6999,2599], CR:[6999,2599] }, addons:[{name:'Solar', NL:[1999,949], CR:[1999,949]}] }
-  },
-  POSVENDA: {
-    SMART: { core: { name:'Smart Core', prods:['Dashboard Pós-Venda','Desempenho','Relatórios'], NL:[3999,1299], CR:[1999,949] }, addons:[] }
-  },
+  COMERCIAL: { SMART: { core: { name:'Smart Core', prods:['Dashboard Comercial','Diário de Vendas','Clientes','Mapa de Vendas','Comparativos','Produtos','Relatórios'], NL:[4999,1299], CR:[2999,1299] }, addons:[] }, SCALE: { core: { name:'Scale Core', prods:['Scale — pacote completo'], NL:[6999,1699], CR:[4999,1699] }, addons:[{name:'Mapa de Prospecção', NL:[999,199], CR:[999,199]},{name:'Correlação de Vendas', NL:[999,199], CR:[999,199]},{name:'Produtos e Oportunidades', NL:[999,199], CR:[999,199]},{name:'Variação Faturamento', NL:[999,199], CR:[999,199]},{name:'Cross Selling', NL:[999,199], CR:[999,199]}] }, STRATEGIC: { core: { name:'Strategic Core', prods:['Strategic — pacote completo'], NL:[9999,1999], CR:[6999,1849] }, addons:[{name:'Atendimento Carteira de Clientes', NL:[1999,299], CR:[1999,299]},{name:'Orçamento de Vendas', NL:[1999,299], CR:[1999,299]},{name:'Rentabilidade', NL:[1999,299], CR:[1999,299]},{name:'Informações Financeiras a Receber', NL:[1999,299], CR:[1999,299]}] }, FOCO: { core: { name:'Foco da Equipe', prods:['Foco da Equipe'], NL:[4999,1299], CR:[999,299] }, addons:[{name:'Foco da Equipe (Addon)', NL:[4999,1299], CR:[999,199]}] } },
+  FINANCEIRA: { SMART: { core: { name:'Smart Core', prods:['Dashboard Financeiro','Contas a Receber','Det. Contas a Receber','Contas a Pagar','Det. Contas a Pagar'], NL:[3999,1299], CR:[1999,1299] }, addons:[] }, SCALE: { core: { name:'Scale Core', prods:['Scale — pacote completo'], NL:[4999,1699], CR:[2999,1699] }, addons:[{name:'Avaliação Clientes', NL:[999,199], CR:[999,199]},{name:'Atrasos e Inadimplências', NL:[999,199], CR:[999,199]},{name:'Fluxo de Caixa', NL:[999,199], CR:[999,199]}] }, STRATEGIC: { core: { name:'Strategic Core', prods:['Strategic — pacote completo'], NL:[19999,2999], CR:[19999,2999] }, addons:[{name:'Orçamento Financeiro', NL:[9999,699], CR:[9999,699]},{name:'DRE', NL:[19999,999],CR:[19999,999]}] } },
+  SUPRIMENTOS: { SMART: { core: { name:'Smart Core', prods:['Estoque'], NL:[4999,1299], CR:[999,699] }, addons:[] }, SCALE: { core: { name:'Scale Core', prods:['Entradas','Aging Estoque','Rupturas'], NL:[3999,1699], CR:[1999,1699] }, addons:[] }, STRATEGIC: { core: { name:'Strategic Core', prods:['Dashboard Suprimentos','Excesso de Estoque','Rupturas Avançada','Estoque Desbalanceado','Necessidade de Transferências','Necessidade de Compras'], NL:[19999,2699], CR:[19999,2699] }, addons:[] } },
+  BENEFICIOS: { SMART: { core: { name:'Smart Core', prods:['Dashboard Benefícios','Regras','Rebates','Price Protection','Stock Rotation'], NL:[1999,1299], CR:[1999,949] }, addons:[] }, SCALE: { core: { name:'Scale Core', prods:['Scale — pacote completo'], NL:[1999,949], CR:[1999,949] }, addons:[] }, STRATEGIC: { core: { name:'Strategic Core', prods:['Validação Sellin','Validação Sellout'], NL:[6999,2599], CR:[6999,2599] }, addons:[{name:'Solar', NL:[1999,949], CR:[1999,949]}] } },
+  POSVENDA: { SMART: { core: { name:'Smart Core', prods:['Dashboard Pós-Venda','Desempenho','Relatórios'], NL:[3999,1299], CR:[1999,949] }, addons:[] } },
   PROJETO: null
 };
 
@@ -43,57 +20,11 @@ window.onload=()=>{
   setDev('SIM'); renderTiers(); renderProds(); calc();
 };
 
-function setType(t){
-  S.type=t; S.sel={};
-  ['NEWLOGO','CROSS'].forEach(x=>document.getElementById('tb-'+x).classList.toggle('active',x===t));
-  document.getElementById('type-alert-txt').textContent = t==='NEWLOGO' 
-    ? 'New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.'
-    : 'Cross/Upsell: preços diferenciados para clientes com contrato ativo. MRR mínimo: R$ 1.600 | Sem implantação mínima.';
-  renderTiers(); renderProds(); calc();
-}
-
-function setSuite(s){
-  S.suite=s; S.tier='SMART';
-  document.querySelectorAll('.suite-btn').forEach(b=>b.classList.remove('sel'));
-  document.getElementById('sb-'+s).classList.add('sel');
-  const isProjeto = s==='PROJETO';
-  document.getElementById('projeto-card').style.display = isProjeto ? 'block' : 'none';
-  document.getElementById('tier-tabs-wrap').style.display = isProjeto ? 'none' : '';
-  document.getElementById('ptbody').closest('table').style.display = isProjeto ? 'none' : '';
-  renderTiers(); renderProds(); calc();
-}
-
-function renderTiers(){
-  const suiteData = CAT[S.suite]; if(!suiteData) return;
-  const tierMeta={ SMART:{lbl:'⚡ Smart',cls:'smart'}, SCALE:{lbl:'📈 Scale',cls:'scale'}, STRATEGIC:{lbl:'🏆 Strategic',cls:'strategic'}, FOCO:{lbl:'👥 Foco',cls:'other'} };
-  let h='<div class="tier-tabs">';
-  Object.keys(suiteData).forEach(t=>{
-    const m=tierMeta[t]||{lbl:t,cls:'other'};
-    const a=S.tier===t?'active':'';
-    h+=`<div class="ttab ${m.cls} ${a}" onclick="setTier('${t}')">${m.lbl}</div>`;
-  });
-  h+='</div>';
-  document.getElementById('tier-tabs-wrap').innerHTML=h;
-}
-
+function setType(t){ S.type=t; S.sel={}; ['NEWLOGO','CROSS'].forEach(x=>document.getElementById('tb-'+x).classList.toggle('active',x===t)); document.getElementById('type-alert-txt').textContent = t==='NEWLOGO' ? 'New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.' : 'Cross/Upsell: preços diferenciados para clientes com contrato ativo. MRR mínimo: R$ 1.600 | Sem implantação mínima.'; renderTiers(); renderProds(); calc(); }
+function setSuite(s){ S.suite=s; S.tier='SMART'; document.querySelectorAll('.suite-btn').forEach(b=>b.classList.remove('sel')); document.getElementById('sb-'+s).classList.add('sel'); const isProjeto = s==='PROJETO'; document.getElementById('projeto-card').style.display = isProjeto ? 'block' : 'none'; document.getElementById('tier-tabs-wrap').style.display = isProjeto ? 'none' : ''; document.getElementById('ptbody').closest('table').style.display = isProjeto ? 'none' : ''; renderTiers(); renderProds(); calc(); }
+function renderTiers(){ const suiteData = CAT[S.suite]; if(!suiteData) return; const tierMeta={ SMART:{lbl:'⚡ Smart',cls:'smart'}, SCALE:{lbl:'📈 Scale',cls:'scale'}, STRATEGIC:{lbl:'🏆 Strategic',cls:'strategic'}, FOCO:{lbl:'👥 Foco',cls:'other'} }; let h='<div class="tier-tabs">'; Object.keys(suiteData).forEach(t=>{ const m=tierMeta[t]||{lbl:t,cls:'other'}; const a=S.tier===t?'active':''; h+=`<div class="ttab ${m.cls} ${a}" onclick="setTier('${t}')">${m.lbl}</div>`; }); h+='</div>'; document.getElementById('tier-tabs-wrap').innerHTML=h; }
 function setTier(t){ S.tier=t; renderTiers(); renderProds(); }
-
-function renderProds(){
-  if(S.suite==='PROJETO'){ document.getElementById('ptbody').innerHTML=''; return; }
-  const tierData=CAT[S.suite][S.tier];
-  if(!tierData){ document.getElementById('ptbody').innerHTML=''; return; }
-  const typeKey=S.type==='NEWLOGO'?'NL':'CR';
-  let h='';
-  const ck=`${S.suite}-${S.tier}-CORE`;
-  const cd=tierData.core;
-  h+=`<tr><td><input class="pchk" type="checkbox" ${S.sel[ck]?'checked':''} onchange="toggle('${ck}',${cd[typeKey][0]},${cd[typeKey][1]},'${escQ(cd.name)}',false)"></td><td><strong>${cd.name}</strong><div style="font-size:10px;color:var(--muted);margin-top:1px">${cd.prods.join(' · ')}</div></td><td><span class="badge-core">CORE</span></td><td class="pimpl">${f(cd[typeKey][0])}</td><td class="pval">${f(cd[typeKey][1])}/mês</td></tr>`;
-  (tierData.addons||[]).forEach((a,i)=>{
-    const ak=`${S.suite}-${S.tier}-ADDON-${i}`;
-    h+=`<tr><td><input class="pchk" type="checkbox" ${S.sel[ak]?'checked':''} onchange="toggle('${ak}',${a[typeKey][0]},${a[typeKey][1]},'${escQ(a.name)}',true)"></td><td style="padding-left:18px">${a.name}</td><td><span class="badge-addon">ADD-ON</span></td><td class="pimpl">${f(a[typeKey][0])}</td><td class="pval">${f(a[typeKey][1])}/mês</td></tr>`;
-  });
-  document.getElementById('ptbody').innerHTML=h;
-}
-
+function renderProds(){ if(S.suite==='PROJETO'){ document.getElementById('ptbody').innerHTML=''; return; } const tierData=CAT[S.suite][S.tier]; if(!tierData){ document.getElementById('ptbody').innerHTML=''; return; } const typeKey=S.type==='NEWLOGO'?'NL':'CR'; let h=''; const ck=`${S.suite}-${S.tier}-CORE`; const cd=tierData.core; h+=`<tr><td><input class="pchk" type="checkbox" ${S.sel[ck]?'checked':''} onchange="toggle('${ck}',${cd[typeKey][0]},${cd[typeKey][1]},'${escQ(cd.name)}',false)"></td><td><strong>${cd.name}</strong><div style="font-size:10px;color:var(--muted);margin-top:1px">${cd.prods.join(' · ')}</div></td><td><span class="badge-core">CORE</span></td><td class="pimpl">${f(cd[typeKey][0])}</td><td class="pval">${f(cd[typeKey][1])}/mês</td></tr>`; (tierData.addons||[]).forEach((a,i)=>{ const ak=`${S.suite}-${S.tier}-ADDON-${i}`; h+=`<tr><td><input class="pchk" type="checkbox" ${S.sel[ak]?'checked':''} onchange="toggle('${ak}',${a[typeKey][0]},${a[typeKey][1]},'${escQ(a.name)}',true)"></td><td style="padding-left:18px">${a.name}</td><td><span class="badge-addon">ADD-ON</span></td><td class="pimpl">${f(a[typeKey][0])}</td><td class="pval">${f(a[typeKey][1])}/mês</td></tr>`; }); document.getElementById('ptbody').innerHTML=h; }
 function toggle(k,impl,mrr,name,isAddon){ if(S.sel[k]) delete S.sel[k]; else S.sel[k]={impl,mrr,name,isAddon,suite:S.suite,tier:S.tier}; calc(); }
 function changeHoras(d){ const el=document.getElementById('projHoras'); el.value=Math.max(0,(parseInt(el.value)||0)+d); calc(); }
 function changeU(d){ const el=document.getElementById('uQty'); el.value=Math.max(1,(parseInt(el.value)||0)+d); calc(); }
@@ -104,10 +35,9 @@ function escQ(s){ return s.replace(/'/g,"\\'"); }
 function clearErr(el){ if(el.value.trim()) el.style.borderColor=''; }
 
 // ═══════════════════════════════════════════════════
-//  CALCULA A NOVA REGRA DE PACOTES E DESCONTOS
+//  CALCULA A NOVA REGRA
 // ═══════════════════════════════════════════════════
 function calc(){
-  // Aqui está a correção: O campo lê diretamente a quantidade de pacotes!
   const qtdPacotes = parseInt(document.getElementById('uQty').value) || 1;
   const dImpl  = Math.max(0,Math.min(100,parseFloat(document.getElementById('dImpl').value)||0));
   const dMRR   = Math.max(0,Math.min(100,parseFloat(document.getElementById('dMRR').value)||0));
@@ -115,15 +45,10 @@ function calc(){
   const fImpl = 1 - (dImpl/100);
   const fMRR  = 1 - (dMRR/100);
 
-  let pacotesTotais = qtdPacotes; // Removida a divisão por 50!
+  let pacotesTotais = qtdPacotes; 
   if (pacotesTotais < 1) pacotesTotais = 1;
   
-  let pacotesCobrados = 0;
-  if (S.type === 'NEWLOGO') {
-      pacotesCobrados = pacotesTotais; 
-  } else {
-      pacotesCobrados = Math.max(0, pacotesTotais - 1); 
-  }
+  let pacotesCobrados = S.type === 'NEWLOGO' ? pacotesTotais : Math.max(0, pacotesTotais - 1); 
   const sustBase = pacotesCobrados * 799;
 
   let implGross=0, mrrProds=0;
@@ -248,7 +173,62 @@ function calc(){
 }
 
 // ═══════════════════════════════════════════════════
-//  GERA O PDF DA PROPOSTA (COM DESCONTOS EM CADA LINHA)
+//  MÁGICA: GERA LINK PARA COMPARTILHAMENTO ONLINE
+// ═══════════════════════════════════════════════════
+function gerarLink() {
+  const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
+  const missing = reqFields.filter(fx=>{ const el = document.getElementById(fx.id); return !el || !el.value.trim(); });
+  if(missing.length>0){
+    reqFields.forEach(fx=>{ const el=document.getElementById(fx.id); if(el) el.style.borderColor = el.value.trim() ? 'var(--border)' : 'var(--danger)'; });
+    alert('⚠️ Preencha os campos obrigatórios antes de gerar o Link da Proposta:\n\n' + missing.map(fx=>'• '+fx.label).join('\n'));
+    return;
+  }
+  reqFields.forEach(fx=>{ const el = document.getElementById(fx.id); if(el) el.style.borderColor=''; });
+
+  const data = {
+    cname: document.getElementById('cName').value || '—',
+    contact: document.getElementById('cContact') ? document.getElementById('cContact').value : '—',
+    consult: document.getElementById('cConsult') ? document.getElementById('cConsult').value : '—',
+    cdate: document.getElementById('cDate') ? document.getElementById('cDate').value : '',
+    notes: document.getElementById('propNotes') ? document.getElementById('propNotes').value : '',
+    dImpl: parseFloat(document.getElementById('dImpl').value) || 0,
+    dMRR: parseFloat(document.getElementById('dMRR').value) || 0,
+    dReason: document.getElementById('dReason') ? document.getElementById('dReason').value : '',
+    qtdPacotes: parseInt(document.getElementById('uQty').value) || 1,
+    prods: Object.values(S.sel),
+    devMRR: S.dev==='SIM' ? 750 : 0,
+    isProjeto: S.suite==='PROJETO',
+    projHoras: S.suite==='PROJETO' && document.getElementById('projHoras') ? (parseInt(document.getElementById('projHoras').value)||0) : 0,
+    projValHora: S.suite==='PROJETO' && document.getElementById('projValHora') ? (parseFloat(document.getElementById('projValHora').value)||275) : 0,
+    projDesc: S.suite==='PROJETO' && document.getElementById('projDesc') ? document.getElementById('projDesc').value : '',
+    type: S.type,
+    parcelas: typeof S_parcelas !== 'undefined' ? S_parcelas : 1
+  };
+
+  const jsonStr = JSON.stringify(data);
+  const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
+  
+  let baseUrl = window.location.href.split('?')[0].split('#')[0];
+  if (baseUrl.endsWith('index.html')) baseUrl = baseUrl.replace('index.html', '');
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  
+  const link = `${baseUrl}proposta.html?data=${base64}`;
+
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn = document.getElementById('btn-link');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ Link Copiado!';
+    btn.style.background = '#16a34a';
+    btn.style.borderColor = '#16a34a';
+    btn.style.color = '#fff';
+    setTimeout(()=>{ btn.innerHTML = orig; btn.style.background = ''; btn.style.borderColor = ''; btn.style.color='';}, 3000);
+  }).catch(err => {
+    prompt("Copie o link abaixo para enviar ao cliente:", link);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  GERA O PDF DA PROPOSTA (DOCUMENTO FÍSICO)
 // ═══════════════════════════════════════════════════
 function gerarPDF(){
   const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
@@ -273,7 +253,7 @@ function gerarPDF(){
   const fMRR  = 1 - (dMRR/100);
 
   const qtdPacotes = parseInt(document.getElementById('uQty').value) || 1;
-  let pacotesTotais = qtdPacotes; // Removida a divisão por 50!
+  let pacotesTotais = qtdPacotes; 
   if (pacotesTotais < 1) pacotesTotais = 1;
   let pacotesCobrados = S.type === 'NEWLOGO' ? pacotesTotais : Math.max(0, pacotesTotais - 1);
   const sustVal = pacotesCobrados * 799;
