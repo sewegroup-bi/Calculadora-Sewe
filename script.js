@@ -104,12 +104,16 @@ function escQ(s){ return s.replace(/'/g,"\\'"); }
 function clearErr(el){ if(el.value.trim()) el.style.borderColor=''; }
 
 // ═══════════════════════════════════════════════════
-//  CALCULA A NOVA REGRA DE USUÁRIOS E SUSTENTAÇÃO
+//  CALCULA A NOVA REGRA DE USUÁRIOS E DESCONTOS
 // ═══════════════════════════════════════════════════
 function calc(){
   const users  = parseInt(document.getElementById('uQty').value)||1;
   const dImpl  = Math.max(0,Math.min(100,parseFloat(document.getElementById('dImpl').value)||0));
   const dMRR   = Math.max(0,Math.min(100,parseFloat(document.getElementById('dMRR').value)||0));
+
+  // Multiplicadores do Desconto Líquido
+  const fImpl = 1 - (dImpl/100);
+  const fMRR  = 1 - (dMRR/100);
 
   let pacotesTotais = Math.ceil(users / 50);
   if (pacotesTotais < 1) pacotesTotais = 1;
@@ -158,8 +162,8 @@ function calc(){
   const sustLbl = document.getElementById('sust-lbl-pacotes');
   if (sustLbl) sustLbl.textContent = S.type === 'NEWLOGO' ? `${pacotesCobrados} pacote(s) de Sustentação Base` : `${pacotesCobrados} pacote(s) extra(s) de Sustentação`;
 
-  const implFinal = implGross * (1 - dImpl/100);
-  const mrrFinal  = mrrGross  * (1 - dMRR/100);
+  const implFinal = implGross * fImpl;
+  const mrrFinal  = mrrGross  * fMRR;
   const grandTotal = isProjeto ? implFinal : implFinal + mrrFinal*12;
 
   function faixaInfo(pct,campo){
@@ -206,18 +210,38 @@ function calc(){
   if (document.getElementById('gb-arr')) document.getElementById('gb-arr').textContent  = f(grandTotal);
   if (document.getElementById('sb-cname')) document.getElementById('sb-cname').textContent = document.getElementById('cName').value||'—';
 
+  // EXIBE DESCONTOS INDIVIDUAIS NA BARRA LATERAL
   let ih='', mh='';
-  prods.filter(p=>p.impl>0).forEach(p=> ih+=`<div class="sval-row"><span class="sval-lbl">${p.name}</span><span class="sval-val">${f(p.impl)}</span></div>`);
-  prods.filter(p=>p.mrr>0).forEach(p=> mh+=`<div class="sval-row"><span class="sval-lbl">${p.name}</span><span class="sval-val">${f(p.mrr)}/mês</span></div>`);
-  if(pacotesCobrados > 0) mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Sustentação Base (${pacotesCobrados}x pacote)</span><span class="sval-val">${f(sustBase)}/mês</span></div>`;
-  if(devMRR>0) mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Desenvolvimento</span><span class="sval-val">${f(devMRR)}/mês</span></div>`;
+  prods.filter(p=>p.impl>0).forEach(p=> {
+      const vGross = p.impl; const vNet = vGross * fImpl;
+      const valHtml = dImpl > 0 ? `<del style="font-size:10px;opacity:0.6;margin-right:6px">${f(vGross)}</del>${f(vNet)}` : f(vGross);
+      ih+=`<div class="sval-row"><span class="sval-lbl">${p.name}</span><span class="sval-val">${valHtml}</span></div>`;
+  });
+  
+  prods.filter(p=>p.mrr>0).forEach(p=> {
+      const vGross = p.mrr; const vNet = vGross * fMRR;
+      const valHtml = dMRR > 0 ? `<del style="font-size:10px;opacity:0.6;margin-right:6px">${f(vGross)}</del>${f(vNet)}` : f(vGross);
+      mh+=`<div class="sval-row"><span class="sval-lbl">${p.name}</span><span class="sval-val">${valHtml}/mês</span></div>`;
+  });
+  
+  if(pacotesCobrados > 0) {
+      const vGross = sustBase; const vNet = vGross * fMRR;
+      const valHtml = dMRR > 0 ? `<del style="font-size:10px;opacity:0.6;margin-right:6px">${f(vGross)}</del>${f(vNet)}` : f(vGross);
+      mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Sustentação Base (${pacotesCobrados}x pacote)</span><span class="sval-val">${valHtml}/mês</span></div>`;
+  }
+  
+  if(devMRR>0) {
+      const vGross = devMRR; const vNet = vGross * fMRR;
+      const valHtml = dMRR > 0 ? `<del style="font-size:10px;opacity:0.6;margin-right:6px">${f(vGross)}</del>${f(vNet)}` : f(vGross);
+      mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Desenvolvimento</span><span class="sval-val">${valHtml}/mês</span></div>`;
+  }
   
   if (document.getElementById('impl-lines')) document.getElementById('impl-lines').innerHTML = ih || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem produtos</div>';
   if (document.getElementById('mrr-lines')) document.getElementById('mrr-lines').innerHTML = mh || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem recorrente</div>';
 }
 
 // ═══════════════════════════════════════════════════
-//  GERA O PDF DA PROPOSTA OFICIAL (DOCUMENTO EXTERNO)
+//  GERA O PDF (AGORA COM DESCONTOS EM CADA LINHA)
 // ═══════════════════════════════════════════════════
 function gerarPDF(){
   const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
@@ -238,6 +262,10 @@ function gerarPDF(){
   const dMRR    = parseFloat(document.getElementById('dMRR').value) || 0;
   const dReason = document.getElementById('dReason') ? document.getElementById('dReason').value : '';
   
+  // Fatores de Desconto
+  const fImpl = 1 - (dImpl/100);
+  const fMRR  = 1 - (dMRR/100);
+
   const users   = parseInt(document.getElementById('uQty').value) || 1;
   let pacotesTotais = Math.ceil(users / 50);
   if (pacotesTotais < 1) pacotesTotais = 1;
@@ -257,38 +285,45 @@ function gerarPDF(){
   implGross += projImplGross;
 
   const mrrGross = isProjeto ? 0 : (mrrProds + sustVal + devMRR);
-  const implFinal = implGross * (1 - dImpl/100);
-  const mrrFinal  = mrrGross  * (1 - dMRR/100);
+  const implFinal = implGross * fImpl;
+  const mrrFinal  = mrrGross  * fMRR;
 
   const dateStr = cdate ? new Date(cdate+'T00:00:00').toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
   const suiteName = {COMERCIAL:'Comercial',FINANCEIRA:'Financeira',SUPRIMENTOS:'Suprimentos',BENEFICIOS:'Benefícios',POSVENDA:'Pós-Venda'};
   const suiteColor= {COMERCIAL:'#dbeafe|#1d4ed8',FINANCEIRA:'#d1fae5|#065f46',SUPRIMENTOS:'#ede9fe|#6d28d9',BENEFICIOS:'#fee2e2|#b91c1c',POSVENDA:'#fef3c7|#92400e'};
 
+  // Tabela de Produtos no PDF (Com desconto em cada linha)
   const prodRows = prods.map(p=>{
     const sc = p.suite ? suiteColor[p.suite]||'#f3f4f6|#374151' : '';
     const [bg,fg] = sc ? sc.split('|') : ['#f3f4f6','#374151'];
     const tag = p.suite ? `<span style="background:${bg};color:${fg};font-size:8px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;margin-right:6px">${suiteName[p.suite]||p.suite}</span>` : '';
     const typetag = `<span style="background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd;font-size:8px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px">${p.isAddon?'Add-on':'Core'}</span>`;
-    return `<tr><td>${tag}${p.name}${typetag}</td><td style="text-align:right">${p.impl>0?f(p.impl):'—'}</td><td style="text-align:right">${f(p.mrr)}<span style="font-size:9px">/mês</span></td></tr>`;
+    
+    const implHtml = p.impl > 0 ? (dImpl > 0 ? `<del style="font-size:8px;color:#999;display:block">${f(p.impl)}</del>${f(p.impl * fImpl)}` : f(p.impl)) : '—';
+    const mrrHtml = p.mrr > 0 ? (dMRR > 0 ? `<del style="font-size:8px;color:#999;display:block">${f(p.mrr)}</del>${f(p.mrr * fMRR)}` : f(p.mrr)) : '—';
+
+    return `<tr><td>${tag}${p.name}${typetag}</td><td style="text-align:right">${implHtml}</td><td style="text-align:right">${mrrHtml}<span style="font-size:9px">/mês</span></td></tr>`;
   }).join('');
 
   let lblSustentacao = S.type === 'NEWLOGO' 
-    ? `Sustentação Base & Licenciamento (Pacote p/ ${users} usuários)` 
+    ? `Sustentação Base & Licenciamento (Pacote p/ até ${pacotesCobrados*50} usuários)` 
     : `Sustentação Adicional (${pacotesCobrados}x pacote extra de usuários)`;
   if(S.type === 'CROSS' && pacotesCobrados === 0){ lblSustentacao = `Licenciamento & Sustentação (${users} usuários inclusos na cota do contrato Cross)`; }
 
+  const sustValHtml = sustVal > 0 ? (dMRR > 0 ? `<del style="font-size:8px;color:#999;display:block">${f(sustVal)}</del>${f(sustVal * fMRR)}` : f(sustVal)) : 'R$ 0,00';
+  const devValHtml = devMRR > 0 ? (dMRR > 0 ? `<del style="font-size:8px;color:#999;display:block">${f(devMRR)}</del>${f(devMRR * fMRR)}` : f(devMRR)) : 'R$ 0,00';
+
   const infraRows = `
-    <tr style="background:#fafbfc"><td style="color:#555;font-size:10px">${lblSustentacao}</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${sustVal > 0 ? f(sustVal) : 'R$ 0,00'}<span style="font-size:9px">/mês</span></td></tr>
-    ${devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:10px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${f(devMRR)}<span style="font-size:9px">/mês</span></td></tr>` : ''}
-    ${dImpl>0 ? `<tr><td style="color:#dc2626;font-size:10px" colspan="2">Desconto Implantação (${dImpl}%)${dReason?' — '+dReason:''}</td><td style="text-align:right;color:#dc2626;font-size:10px">−${f(implGross*dImpl/100)}</td></tr>` : ''}
-    ${dMRR>0  ? `<tr><td style="color:#dc2626;font-size:10px" colspan="2">Desconto Recorrência (${dMRR}%)</td><td style="text-align:right;color:#dc2626;font-size:10px">−${f(mrrGross*dMRR/100)}<span style="font-size:9px">/mês</span></td></tr>` : ''}`;
+    <tr style="background:#fafbfc"><td style="color:#555;font-size:10px">${lblSustentacao}</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${sustValHtml}<span style="font-size:9px">/mês</span></td></tr>
+    ${devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:10px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${devValHtml}<span style="font-size:9px">/mês</span></td></tr>` : ''}
+    ${dReason ? `<tr><td style="color:#dc2626;font-size:10px" colspan="3">Motivo do Desconto: ${dReason}</td></tr>` : ''}`;
 
   const parcelasAtuais = typeof S_parcelas !== 'undefined' ? S_parcelas : 1;
   const parcelaTexto = parcelasAtuais === 1 ? 'À vista — 7 dias após assinatura' : `${parcelasAtuais}× de ${f(implFinal/parcelasAtuais)} sem juros`;
 
   let bodyHTML = '';
   if(isProjeto){
-    const projFinal = projImplGross*(1-dImpl/100);
+    const projFinal = projImplGross*fImpl;
     bodyHTML = `
       <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:18px 20px;margin-bottom:16px;page-break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
@@ -310,8 +345,8 @@ function gerarPDF(){
         </tbody>
       </table>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;page-break-inside:avoid">
-        <div style="background:#0e2a5c;border-radius:10px;padding:16px 20px;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact"><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-bottom:6px">IMPLANTAÇÃO</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1">${f(implFinal)}</div><div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:4px">Cobrança única</div></div>
-        <div style="background:#0ab5a0;border-radius:10px;padding:16px 20px;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact"><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.7);margin-bottom:6px">RECORRÊNCIA MENSAL</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1">${f(mrrFinal)}</div><div style="font-size:9px;color:rgba(255,255,255,.6);margin-top:4px">por mês</div></div>
+        <div style="background:#0e2a5c;border-radius:10px;padding:16px 20px;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact"><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-bottom:6px">IMPLANTAÇÃO FINAL</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1">${f(implFinal)}</div><div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:4px">Cobrança única</div></div>
+        <div style="background:#0ab5a0;border-radius:10px;padding:16px 20px;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact"><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.7);margin-bottom:6px">RECORRÊNCIA FINAL</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1">${f(mrrFinal)}</div><div style="font-size:9px;color:rgba(255,255,255,.6);margin-top:4px">por mês</div></div>
       </div>
       <div style="background:#f8f9fc;border-radius:10px;padding:16px 20px;page-break-inside:avoid">
         <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#7b8199;margin-bottom:12px">CONDIÇÕES COMERCIAIS</div>
