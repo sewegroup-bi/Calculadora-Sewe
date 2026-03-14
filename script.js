@@ -20,14 +20,31 @@ window.onload=()=>{
   setDev('SIM'); renderTiers(); renderProds(); calc();
 };
 
-function setType(t){ S.type=t; S.sel={}; ['NEWLOGO','CROSS'].forEach(x=>document.getElementById('tb-'+x).classList.toggle('active',x===t)); document.getElementById('type-alert-txt').textContent = t==='NEWLOGO' ? 'New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.' : 'Cross/Upsell: preços diferenciados para clientes com contrato ativo. MRR mínimo: R$ 1.600 | Sem implantação mínima.'; renderTiers(); renderProds(); calc(); }
+function setType(t){ 
+  S.type=t; S.sel={}; 
+  ['NEWLOGO','CROSS'].forEach(x=>document.getElementById('tb-'+x).classList.toggle('active',x===t)); 
+  document.getElementById('type-alert-txt').textContent = t==='NEWLOGO' ? 'New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.' : 'Cross/Upsell: preços diferenciados para clientes com contrato ativo. MRR mínimo: R$ 1.600 | Sem implantação mínima.'; 
+  
+  // Atualiza o valor padrão do campo baseado na escolha
+  const el = document.getElementById('uQty');
+  if(t === 'CROSS') el.value = 0;
+  if(t === 'NEWLOGO' && parseInt(el.value) < 1) el.value = 1;
+
+  renderTiers(); renderProds(); calc(); 
+}
+
 function setSuite(s){ S.suite=s; S.tier='SMART'; document.querySelectorAll('.suite-btn').forEach(b=>b.classList.remove('sel')); document.getElementById('sb-'+s).classList.add('sel'); const isProjeto = s==='PROJETO'; document.getElementById('projeto-card').style.display = isProjeto ? 'block' : 'none'; document.getElementById('tier-tabs-wrap').style.display = isProjeto ? 'none' : ''; document.getElementById('ptbody').closest('table').style.display = isProjeto ? 'none' : ''; renderTiers(); renderProds(); calc(); }
 function renderTiers(){ const suiteData = CAT[S.suite]; if(!suiteData) return; const tierMeta={ SMART:{lbl:'⚡ Smart',cls:'smart'}, SCALE:{lbl:'📈 Scale',cls:'scale'}, STRATEGIC:{lbl:'🏆 Strategic',cls:'strategic'}, FOCO:{lbl:'👥 Foco',cls:'other'} }; let h='<div class="tier-tabs">'; Object.keys(suiteData).forEach(t=>{ const m=tierMeta[t]||{lbl:t,cls:'other'}; const a=S.tier===t?'active':''; h+=`<div class="ttab ${m.cls} ${a}" onclick="setTier('${t}')">${m.lbl}</div>`; }); h+='</div>'; document.getElementById('tier-tabs-wrap').innerHTML=h; }
 function setTier(t){ S.tier=t; renderTiers(); renderProds(); }
 function renderProds(){ if(S.suite==='PROJETO'){ document.getElementById('ptbody').innerHTML=''; return; } const tierData=CAT[S.suite][S.tier]; if(!tierData){ document.getElementById('ptbody').innerHTML=''; return; } const typeKey=S.type==='NEWLOGO'?'NL':'CR'; let h=''; const ck=`${S.suite}-${S.tier}-CORE`; const cd=tierData.core; h+=`<tr><td><input class="pchk" type="checkbox" ${S.sel[ck]?'checked':''} onchange="toggle('${ck}',${cd[typeKey][0]},${cd[typeKey][1]},'${escQ(cd.name)}',false)"></td><td><strong>${cd.name}</strong><div style="font-size:10px;color:var(--muted);margin-top:1px">${cd.prods.join(' · ')}</div></td><td><span class="badge-core">CORE</span></td><td class="pimpl">${f(cd[typeKey][0])}</td><td class="pval">${f(cd[typeKey][1])}/mês</td></tr>`; (tierData.addons||[]).forEach((a,i)=>{ const ak=`${S.suite}-${S.tier}-ADDON-${i}`; h+=`<tr><td><input class="pchk" type="checkbox" ${S.sel[ak]?'checked':''} onchange="toggle('${ak}',${a[typeKey][0]},${a[typeKey][1]},'${escQ(a.name)}',true)"></td><td style="padding-left:18px">${a.name}</td><td><span class="badge-addon">ADD-ON</span></td><td class="pimpl">${f(a[typeKey][0])}</td><td class="pval">${f(a[typeKey][1])}/mês</td></tr>`; }); document.getElementById('ptbody').innerHTML=h; }
 function toggle(k,impl,mrr,name,isAddon){ if(S.sel[k]) delete S.sel[k]; else S.sel[k]={impl,mrr,name,isAddon,suite:S.suite,tier:S.tier}; calc(); }
 function changeHoras(d){ const el=document.getElementById('projHoras'); el.value=Math.max(0,(parseInt(el.value)||0)+d); calc(); }
-function changeU(d){ const el=document.getElementById('uQty'); el.value=Math.max(1,(parseInt(el.value)||0)+d); calc(); }
+function changeU(d){ 
+  const el = document.getElementById('uQty'); 
+  const minVal = S.type === 'NEWLOGO' ? 1 : 0; // Cross pode chegar a 0
+  el.value = Math.max(minVal, (parseInt(el.value)||0)+d); 
+  calc(); 
+}
 function setDev(v){ S.dev=v; ['NAO','SIM','NAOSE','HORA'].forEach(x=>document.getElementById('dev-'+x).classList.toggle('active',x===v)); calc(); }
 function setParcelas(n){ S_parcelas = n; document.querySelectorAll('.parcela-btn').forEach(b=>b.classList.toggle('active', +b.dataset.p === n)); calc(); }
 function f(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
@@ -38,17 +55,16 @@ function clearErr(el){ if(el.value.trim()) el.style.borderColor=''; }
 //  CALCULA A NOVA REGRA
 // ═══════════════════════════════════════════════════
 function calc(){
-  const qtdPacotes = parseInt(document.getElementById('uQty').value) || 1;
+  let qtdPacotes = parseInt(document.getElementById('uQty').value);
+  if (isNaN(qtdPacotes)) qtdPacotes = S.type === 'NEWLOGO' ? 1 : 0;
+
   const dImpl  = Math.max(0,Math.min(100,parseFloat(document.getElementById('dImpl').value)||0));
   const dMRR   = Math.max(0,Math.min(100,parseFloat(document.getElementById('dMRR').value)||0));
 
   const fImpl = 1 - (dImpl/100);
   const fMRR  = 1 - (dMRR/100);
 
-  let pacotesTotais = qtdPacotes; 
-  if (pacotesTotais < 1) pacotesTotais = 1;
-  
-  let pacotesCobrados = S.type === 'NEWLOGO' ? pacotesTotais : Math.max(0, pacotesTotais - 1); 
+  const pacotesCobrados = Math.max(0, qtdPacotes); 
   const sustBase = pacotesCobrados * 799;
 
   let implGross=0, mrrProds=0;
@@ -69,13 +85,13 @@ function calc(){
   const devMRR = S.dev==='SIM' ? 750 : 0;
   const mrrGross = isProjeto ? 0 : mrrProds + sustBase + devMRR;
 
-  const crossSustMsg = (S.type === 'CROSS' && pacotesCobrados === 0);
+  const crossSustMsg = (S.type === 'CROSS');
   const crossMsg = document.getElementById('sust-cross-msg');
   if (crossMsg) crossMsg.style.display = crossSustMsg ? 'block' : 'none';
   
   const sustDisp = document.getElementById('sust-val-display');
   if (sustDisp) {
-      if (crossSustMsg) {
+      if (S.type === 'CROSS' && pacotesCobrados === 0) {
           sustDisp.textContent = "Incluso";
           sustDisp.style.color = "var(--muted)";
       } else {
@@ -87,9 +103,9 @@ function calc(){
   const sustLbl = document.getElementById('sust-lbl-pacotes');
   if (sustLbl) {
       if (S.type === 'NEWLOGO') {
-          sustLbl.textContent = `Libera até ${pacotesTotais * 50} usuários`;
+          sustLbl.textContent = `${pacotesCobrados} pacote(s) (Até ${pacotesCobrados * 50} usuários)`;
       } else {
-          sustLbl.textContent = `${pacotesCobrados} pacote(s) extra(s) (Libera +${pacotesCobrados * 50} usuários)`;
+          sustLbl.textContent = pacotesCobrados === 0 ? "Nenhum pacote extra adicionado" : `${pacotesCobrados} pacote(s) extra(s) (Libera +${pacotesCobrados * 50} usuários)`;
       }
   }
 
@@ -159,7 +175,7 @@ function calc(){
   if(pacotesCobrados > 0) {
       const vGross = sustBase; const vNet = vGross * fMRR;
       const valHtml = dMRR > 0 ? `<del style="font-size:10px;opacity:0.6;margin-right:6px">${f(vGross)}</del>${f(vNet)}` : f(vGross);
-      mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Sustentação Base (${pacotesCobrados}x pct)</span><span class="sval-val">${valHtml}/mês</span></div>`;
+      mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Sustentação (${pacotesCobrados}x pct)</span><span class="sval-val">${valHtml}/mês</span></div>`;
   }
   
   if(devMRR>0) {
@@ -170,61 +186,6 @@ function calc(){
   
   if (document.getElementById('impl-lines')) document.getElementById('impl-lines').innerHTML = ih || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem produtos</div>';
   if (document.getElementById('mrr-lines')) document.getElementById('mrr-lines').innerHTML = mh || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem recorrente</div>';
-}
-
-// ═══════════════════════════════════════════════════
-//  MÁGICA: GERA LINK PARA COMPARTILHAMENTO ONLINE
-// ═══════════════════════════════════════════════════
-function gerarLink() {
-  const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
-  const missing = reqFields.filter(fx=>{ const el = document.getElementById(fx.id); return !el || !el.value.trim(); });
-  if(missing.length>0){
-    reqFields.forEach(fx=>{ const el=document.getElementById(fx.id); if(el) el.style.borderColor = el.value.trim() ? 'var(--border)' : 'var(--danger)'; });
-    alert('⚠️ Preencha os campos obrigatórios antes de gerar o Link da Proposta:\n\n' + missing.map(fx=>'• '+fx.label).join('\n'));
-    return;
-  }
-  reqFields.forEach(fx=>{ const el = document.getElementById(fx.id); if(el) el.style.borderColor=''; });
-
-  const data = {
-    cname: document.getElementById('cName').value || '—',
-    contact: document.getElementById('cContact') ? document.getElementById('cContact').value : '—',
-    consult: document.getElementById('cConsult') ? document.getElementById('cConsult').value : '—',
-    cdate: document.getElementById('cDate') ? document.getElementById('cDate').value : '',
-    notes: document.getElementById('propNotes') ? document.getElementById('propNotes').value : '',
-    dImpl: parseFloat(document.getElementById('dImpl').value) || 0,
-    dMRR: parseFloat(document.getElementById('dMRR').value) || 0,
-    dReason: document.getElementById('dReason') ? document.getElementById('dReason').value : '',
-    qtdPacotes: parseInt(document.getElementById('uQty').value) || 1,
-    prods: Object.values(S.sel),
-    devMRR: S.dev==='SIM' ? 750 : 0,
-    isProjeto: S.suite==='PROJETO',
-    projHoras: S.suite==='PROJETO' && document.getElementById('projHoras') ? (parseInt(document.getElementById('projHoras').value)||0) : 0,
-    projValHora: S.suite==='PROJETO' && document.getElementById('projValHora') ? (parseFloat(document.getElementById('projValHora').value)||275) : 0,
-    projDesc: S.suite==='PROJETO' && document.getElementById('projDesc') ? document.getElementById('projDesc').value : '',
-    type: S.type,
-    parcelas: typeof S_parcelas !== 'undefined' ? S_parcelas : 1
-  };
-
-  const jsonStr = JSON.stringify(data);
-  const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
-  
-  let baseUrl = window.location.href.split('?')[0].split('#')[0];
-  if (baseUrl.endsWith('index.html')) baseUrl = baseUrl.replace('index.html', '');
-  if (!baseUrl.endsWith('/')) baseUrl += '/';
-  
-  const link = `${baseUrl}proposta.html?data=${base64}`;
-
-  navigator.clipboard.writeText(link).then(()=>{
-    const btn = document.getElementById('btn-link');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '✅ Link Copiado!';
-    btn.style.background = '#16a34a';
-    btn.style.borderColor = '#16a34a';
-    btn.style.color = '#fff';
-    setTimeout(()=>{ btn.innerHTML = orig; btn.style.background = ''; btn.style.borderColor = ''; btn.style.color='';}, 3000);
-  }).catch(err => {
-    prompt("Copie o link abaixo para enviar ao cliente:", link);
-  });
 }
 
 // ═══════════════════════════════════════════════════
@@ -252,10 +213,8 @@ function gerarPDF(){
   const fImpl = 1 - (dImpl/100);
   const fMRR  = 1 - (dMRR/100);
 
-  const qtdPacotes = parseInt(document.getElementById('uQty').value) || 1;
-  let pacotesTotais = qtdPacotes; 
-  if (pacotesTotais < 1) pacotesTotais = 1;
-  let pacotesCobrados = S.type === 'NEWLOGO' ? pacotesTotais : Math.max(0, pacotesTotais - 1);
+  const qtdPacotes = parseInt(document.getElementById('uQty').value) || 0;
+  let pacotesCobrados = Math.max(0, qtdPacotes);
   const sustVal = pacotesCobrados * 799;
 
   const prods   = Object.values(S.sel);
@@ -293,7 +252,7 @@ function gerarPDF(){
   let lblSustentacao = S.type === 'NEWLOGO' 
     ? `Sustentação Base & Licenciamento (${pacotesCobrados}x pct p/ até ${pacotesCobrados*50} usuários)` 
     : `Sustentação Adicional (${pacotesCobrados}x pct extra p/ +${pacotesCobrados*50} usuários)`;
-  if(S.type === 'CROSS' && pacotesCobrados === 0){ lblSustentacao = `Licenciamento & Sustentação (Cota inicial de 50 usuários Cross inclusa)`; }
+  if(S.type === 'CROSS' && pacotesCobrados === 0){ lblSustentacao = `Licenciamento & Sustentação (Cota inicial de 50 usuários Cross já inclusa no contrato vigente)`; }
 
   const sustValHtml = sustVal > 0 ? (dMRR > 0 ? `<del style="font-size:8px;color:#999;display:block">${f(sustVal)}</del>${f(sustVal * fMRR)}` : f(sustVal)) : 'R$ 0,00';
   const devValHtml = devMRR > 0 ? (dMRR > 0 ? `<del style="font-size:8px;color:#999;display:block">${f(devMRR)}</del>${f(devMRR * fMRR)}` : f(devMRR)) : 'R$ 0,00';
@@ -415,6 +374,61 @@ script, noscript, #print-trigger { display: none !important; }
 <div style="display:none" id="print-trigger"><scr'+'ipt>window.onload=()=>setTimeout(()=>{window.print();},600);<\\/scr'+'ipt></div>
 </body></html>`);
   win.document.close();
+}
+
+// ═══════════════════════════════════════════════════
+//  MÁGICA: GERA LINK PARA COMPARTILHAMENTO ONLINE
+// ═══════════════════════════════════════════════════
+function gerarLink() {
+  const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
+  const missing = reqFields.filter(fx=>{ const el = document.getElementById(fx.id); return !el || !el.value.trim(); });
+  if(missing.length>0){
+    reqFields.forEach(fx=>{ const el=document.getElementById(fx.id); if(el) el.style.borderColor = el.value.trim() ? 'var(--border)' : 'var(--danger)'; });
+    alert('⚠️ Preencha os campos obrigatórios antes de gerar o Link da Proposta:\n\n' + missing.map(fx=>'• '+fx.label).join('\n'));
+    return;
+  }
+  reqFields.forEach(fx=>{ const el = document.getElementById(fx.id); if(el) el.style.borderColor=''; });
+
+  const data = {
+    cname: document.getElementById('cName').value || '—',
+    contact: document.getElementById('cContact') ? document.getElementById('cContact').value : '—',
+    consult: document.getElementById('cConsult') ? document.getElementById('cConsult').value : '—',
+    cdate: document.getElementById('cDate') ? document.getElementById('cDate').value : '',
+    notes: document.getElementById('propNotes') ? document.getElementById('propNotes').value : '',
+    dImpl: parseFloat(document.getElementById('dImpl').value) || 0,
+    dMRR: parseFloat(document.getElementById('dMRR').value) || 0,
+    dReason: document.getElementById('dReason') ? document.getElementById('dReason').value : '',
+    qtdPacotes: parseInt(document.getElementById('uQty').value) || 0,
+    prods: Object.values(S.sel),
+    devMRR: S.dev==='SIM' ? 750 : 0,
+    isProjeto: S.suite==='PROJETO',
+    projHoras: S.suite==='PROJETO' && document.getElementById('projHoras') ? (parseInt(document.getElementById('projHoras').value)||0) : 0,
+    projValHora: S.suite==='PROJETO' && document.getElementById('projValHora') ? (parseFloat(document.getElementById('projValHora').value)||275) : 0,
+    projDesc: S.suite==='PROJETO' && document.getElementById('projDesc') ? document.getElementById('projDesc').value : '',
+    type: S.type,
+    parcelas: typeof S_parcelas !== 'undefined' ? S_parcelas : 1
+  };
+
+  const jsonStr = JSON.stringify(data);
+  const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
+  
+  let baseUrl = window.location.href.split('?')[0].split('#')[0];
+  if (baseUrl.endsWith('index.html')) baseUrl = baseUrl.replace('index.html', '');
+  if (!baseUrl.endsWith('/')) baseUrl += '/';
+  
+  const link = `${baseUrl}proposta.html?data=${base64}`;
+
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn = document.getElementById('btn-link');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ Link Copiado!';
+    btn.style.background = '#16a34a';
+    btn.style.borderColor = '#16a34a';
+    btn.style.color = '#fff';
+    setTimeout(()=>{ btn.innerHTML = orig; btn.style.background = '#0ab5a0'; btn.style.borderColor = ''; btn.style.color='';}, 3000);
+  }).catch(err => {
+    prompt("Copie o link abaixo para enviar ao cliente:", link);
+  });
 }
 
 function copiar(){
