@@ -120,17 +120,17 @@
   </div>
 
   <div class="card">
-    <div class="ch"><div class="ci warn">👥</div><div><div class="ct">Sustentação & Acessos à Plataforma</div><div class="cs">Pacote de licenciamento e suporte integrado</div></div></div>
+    <div class="ch"><div class="ci warn">📦</div><div><div class="ct">Sustentação & Acessos à Plataforma</div><div class="cs">Contratação por pacotes de 50 usuários</div></div></div>
     <div class="cb">
       <div class="users-box">
         <div class="users-ctrl">
           <button class="ubtn" onclick="changeU(-1)">−</button>
-          <input type="number" id="uQty" value="1" min="1" max="999" oninput="calc()">
+          <input type="number" id="uQty" value="1" min="1" max="99" oninput="calc()" title="Quantidade de Pacotes">
           <button class="ubtn" onclick="changeU(1)">+</button>
         </div>
         <div class="u-unit">
-          <div class="u-price" style="font-size: 16px; color: var(--text);">Usuários</div>
-          <div class="u-label" id="sust-lbl-pacotes">1 pacote(s) de Sustentação Base</div>
+          <div class="u-price" style="font-size: 16px; color: var(--text);">Pacotes</div>
+          <div class="u-label" id="sust-lbl-pacotes">Libera até 50 usuários</div>
         </div>
         <div class="u-total">
           <div class="u-totalval" id="sust-val-display" style="color:var(--teal)">R$ 799/mês</div>
@@ -139,10 +139,10 @@
       </div>
       <div class="alert info" style="margin-top:8px">
         <span>ℹ️</span>
-        <span id="user-alert-txt">Cada cota de Sustentação Base abrange até 50 usuários. Aos clientes Cross, a cota inicial já está liberada.</span>
+        <span id="user-alert-txt">Cada pacote de Sustentação abrange até 50 usuários. Aos clientes Cross, o 1º pacote já está garantido no contrato atual.</span>
       </div>
       <div id="sust-cross-msg" style="display:none;margin-top:6px;padding:10px 14px;background:rgba(10,181,160,.08);border:1.5px solid rgba(10,181,160,.25);border-radius:9px;font-size:12px;color:var(--teal)">
-        ✓ Contrato Cross: Cota inicial de até 50 usuários liberada sem custo adicional.
+        ✓ Contrato Cross: O primeiro pacote (50 usuários) é isento de cobrança adicional.
       </div>
     </div>
   </div>
@@ -265,7 +265,7 @@
 
     <div class="neg-grid">
       <div class="neg-box"><div class="neg-num" id="neg-suites">0</div><div class="neg-lbl">Suítes</div></div>
-      <div class="neg-box"><div class="neg-num" id="neg-users">1</div><div class="neg-lbl">Usuários</div></div>
+      <div class="neg-box"><div class="neg-num" id="neg-users">1</div><div class="neg-lbl">Pacotes</div></div>
       <div class="neg-box"><div class="neg-num" id="neg-addons">0</div><div class="neg-lbl">Telas Addon</div></div>
     </div>
 
