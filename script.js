@@ -104,7 +104,7 @@ function escQ(s){ return s.replace(/'/g,"\\'"); }
 function clearErr(el){ if(el.value.trim()) el.style.borderColor=''; }
 
 // ═══════════════════════════════════════════════════
-//  CALCULA A NOVA REGRA DE USUÁRIOS
+//  CALCULA A NOVA REGRA DE USUÁRIOS E SUSTENTAÇÃO
 // ═══════════════════════════════════════════════════
 function calc(){
   const users  = parseInt(document.getElementById('uQty').value)||1;
@@ -141,16 +141,22 @@ function calc(){
   const mrrGross = isProjeto ? 0 : mrrProds + sustBase + devMRR;
 
   const crossSustMsg = (S.type === 'CROSS' && pacotesCobrados === 0);
-  const sustCard = document.getElementById('sust-base-card');
   const crossMsg = document.getElementById('sust-cross-msg');
-  if (sustCard) sustCard.style.display = crossSustMsg ? 'none' : 'flex';
   if (crossMsg) crossMsg.style.display = crossSustMsg ? 'block' : 'none';
   
   const sustDisp = document.getElementById('sust-val-display');
-  if (sustDisp) sustDisp.textContent = f(sustBase) + "/mês";
+  if (sustDisp) {
+      if (crossSustMsg) {
+          sustDisp.textContent = "Incluso";
+          sustDisp.style.color = "var(--muted)";
+      } else {
+          sustDisp.textContent = f(sustBase) + "/mês";
+          sustDisp.style.color = "var(--teal)";
+      }
+  }
   
   const sustLbl = document.getElementById('sust-lbl-pacotes');
-  if (sustLbl) sustLbl.textContent = S.type === 'NEWLOGO' ? `${pacotesCobrados} pacote(s) de R$ 799` : `${pacotesCobrados} pacote(s) extra(s)`;
+  if (sustLbl) sustLbl.textContent = S.type === 'NEWLOGO' ? `${pacotesCobrados} pacote(s) de Sustentação Base` : `${pacotesCobrados} pacote(s) extra(s) de Sustentação`;
 
   const implFinal = implGross * (1 - dImpl/100);
   const mrrFinal  = mrrGross  * (1 - dMRR/100);
@@ -203,7 +209,7 @@ function calc(){
   let ih='', mh='';
   prods.filter(p=>p.impl>0).forEach(p=> ih+=`<div class="sval-row"><span class="sval-lbl">${p.name}</span><span class="sval-val">${f(p.impl)}</span></div>`);
   prods.filter(p=>p.mrr>0).forEach(p=> mh+=`<div class="sval-row"><span class="sval-lbl">${p.name}</span><span class="sval-val">${f(p.mrr)}/mês</span></div>`);
-  if(pacotesCobrados > 0) mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Sustentação (${pacotesCobrados}x pacote)</span><span class="sval-val">${f(sustBase)}/mês</span></div>`;
+  if(pacotesCobrados > 0) mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Sustentação Base (${pacotesCobrados}x pacote)</span><span class="sval-val">${f(sustBase)}/mês</span></div>`;
   if(devMRR>0) mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Desenvolvimento</span><span class="sval-val">${f(devMRR)}/mês</span></div>`;
   
   if (document.getElementById('impl-lines')) document.getElementById('impl-lines').innerHTML = ih || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem produtos</div>';
@@ -267,9 +273,9 @@ function gerarPDF(){
   }).join('');
 
   let lblSustentacao = S.type === 'NEWLOGO' 
-    ? `Sustentação Base + Licenciamento (${pacotesCobrados}x pacote até 50 usuários)` 
-    : `Sustentação Adicional (${pacotesCobrados}x pacote extra)`;
-  if(S.type === 'CROSS' && pacotesCobrados === 0){ lblSustentacao = `Sustentação & Licenciamento (Cota inicial Cross inclusa)`; }
+    ? `Sustentação Base & Licenciamento (Pacote p/ ${users} usuários)` 
+    : `Sustentação Adicional (${pacotesCobrados}x pacote extra de usuários)`;
+  if(S.type === 'CROSS' && pacotesCobrados === 0){ lblSustentacao = `Licenciamento & Sustentação (${users} usuários inclusos na cota do contrato Cross)`; }
 
   const infraRows = `
     <tr style="background:#fafbfc"><td style="color:#555;font-size:10px">${lblSustentacao}</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${sustVal > 0 ? f(sustVal) : 'R$ 0,00'}<span style="font-size:9px">/mês</span></td></tr>
@@ -391,9 +397,49 @@ script, noscript, #print-trigger { display: none !important; }
   win.document.close();
 }
 
+function copiar(){
+  const cname=document.getElementById('cName').value||'—';
+  const impl=document.getElementById('gb-impl').textContent;
+  const mrr=document.getElementById('gb-mrr').textContent.replace(/\/mês/,'');
+  const arr=document.getElementById('gb-arr').textContent;
+  const tipo=S.type==='NEWLOGO'?'New Logo':'Cross/Upsell';
+  const prods=Object.values(S.sel).map(p=>`  - ${p.name}`).join('\n');
+  let txt=`📊 PROPOSTA SEWE GROUP BI\nCliente: ${cname} | Tipo: ${tipo}\n\nProdutos:\n${prods||'  (nenhum)'}\n\n💰 Implantação: ${impl}\n🔄 MRR: ${mrr}/mês\n📋 ARR (12m): ${arr}`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.getElementById('btn-copiar');
+    const orig=btn.innerHTML;
+    btn.textContent='✓ Copiado!';
+    setTimeout(()=>{btn.innerHTML=orig;},2000);
+  });
+}
+
+function limpar(){
+  if(!confirm('Limpar todos os dados?')) return;
+  S.sel={}; S.type='NEWLOGO'; S.suite='COMERCIAL'; S.tier='SMART'; S.dev='SIM';
+  ['cName','cContact','cConsult','propNotes','dReason'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(e){ e.value=''; e.style.borderColor=''; }
+  });
+  document.getElementById('cDate').value  = new Date().toISOString().split('T')[0];
+  document.getElementById('dImpl').value  = '0';
+  document.getElementById('dMRR').value   = '0';
+  document.getElementById('uQty').value   = '1';
+  setParcelas(1);
+  if(document.getElementById('projHoras')) document.getElementById('projHoras').value = '10';
+  if(document.getElementById('projValHora')) document.getElementById('projValHora').value = '275';
+  if(document.getElementById('projDesc')) document.getElementById('projDesc').value = '';
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tb-NEWLOGO').classList.add('active');
+  document.getElementById('type-alert-txt').textContent='New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.';
+  setSuite('COMERCIAL');
+  setDev('SIM');
+  renderTiers(); renderProds(); calc();
+}
+
+function clearErr(el){ if(el.value.trim()) el.style.borderColor=''; }
 
 // ═══════════════════════════════════════════════════
-//  ADMIN SYSTEM (ATUALIZADO SEM ABA DE USUÁRIOS)
+//  ADMIN SYSTEM
 // ═══════════════════════════════════════════════════
 const ADMIN_PWD   = 'sewe2026';
 const STORAGE_KEY = 'sewe_cat_v1';
@@ -450,7 +496,6 @@ function renderAdminTabs(){
       ${meta.label}
     </button>
   `).join('')
-  // A aba de usuários foi removida daqui, ficando apenas a Política Comercial
   + `<button onclick="renderAdminRegras()" id="atab-REGRAS"
       style="padding:13px 22px;border:none;background:${adminSuite==='REGRAS'?'#f5f6fa':'#fff'};
       border-bottom:3px solid ${adminSuite==='REGRAS'?'#0e2a5c':'transparent'};
