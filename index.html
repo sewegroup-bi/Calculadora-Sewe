@@ -269,20 +269,25 @@
       <div class="neg-box"><div class="neg-num" id="neg-addons">0</div><div class="neg-lbl">Telas Addon</div></div>
     </div>
 
-    <div class="actions">
-      <button class="btn btn-primary" onclick="gerarPDF()" style="flex:1">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Gerar Proposta PDF
+    <div class="actions" style="flex-direction: column;">
+      <button class="btn btn-primary" onclick="gerarPDF()" style="width: 100%; justify-content: center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Imprimir / Salvar PDF
+      </button>
+      <button class="btn btn-teal" onclick="gerarLink()" id="btn-link" style="width: 100%; justify-content: center; background: #0ab5a0; box-shadow: 0 3px 10px rgba(10,181,160,.25);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        Copiar Link da Proposta
       </button>
     </div>
     <div class="actions" style="padding-top:0;border-top:none">
       <button class="btn btn-ghost" onclick="limpar()" style="flex:1;font-size:11px">🔄 Limpar Tudo</button>
-      <button class="btn btn-teal" onclick="copiar()" id="btn-copiar" style="flex:1;font-size:11px">📋 Copiar Resumo</button>
+      <button class="btn btn-ghost" onclick="copiar()" id="btn-copiar" style="flex:1;font-size:11px">📋 Resumo em Texto</button>
     </div>
   </div>
 
-</div></div></div><div id="admin-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,18,30,.85);backdrop-filter:blur(6px);align-items:center;justify-content:center">
+</div></div></div>
 
+<div id="admin-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,18,30,.85);backdrop-filter:blur(6px);align-items:center;justify-content:center">
   <div id="admin-login" style="background:#fff;border-radius:16px;padding:40px;width:360px;box-shadow:0 24px 80px rgba(0,0,0,.4)">
     <div style="text-align:center;margin-bottom:28px">
       <div style="font-family:'Chakra Petch',sans-serif;font-size:28px;font-weight:800;color:#0e2a5c;letter-spacing:2px">ADMIN</div>
