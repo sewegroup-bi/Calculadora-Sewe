@@ -30,6 +30,15 @@ function setType(t){
   if(t === 'CROSS') el.value = 0;
   if(t === 'NEWLOGO' && parseInt(el.value) < 1) el.value = 1;
 
+  // NOVO: Exibir ou esconder o card de Crédito Upgrade
+  const upgCard = document.getElementById('upgrade-card');
+  if(upgCard) upgCard.style.display = t === 'CROSS' ? 'block' : 'none';
+  if(t === 'NEWLOGO') {
+      if(document.getElementById('upgName')) document.getElementById('upgName').value = '';
+      if(document.getElementById('upgImpl')) document.getElementById('upgImpl').value = '0';
+      if(document.getElementById('upgMRR')) document.getElementById('upgMRR').value = '0';
+  }
+
   renderTiers(); renderProds(); calc(); 
 }
 
@@ -109,8 +118,12 @@ function calc(){
       }
   }
 
-  const implFinal = implGross * fImpl;
-  const mrrFinal  = mrrGross  * fMRR;
+  const upgName = document.getElementById('upgName') ? document.getElementById('upgName').value : '';
+  const upgImpl = parseFloat(document.getElementById('upgImpl') ? document.getElementById('upgImpl').value : 0) || 0;
+  const upgMRR = parseFloat(document.getElementById('upgMRR') ? document.getElementById('upgMRR').value : 0) || 0;
+
+  const implFinal = Math.max(0, (implGross * fImpl) - upgImpl);
+  const mrrFinal  = Math.max(0, (mrrGross  * fMRR) - upgMRR);
   const grandTotal = isProjeto ? implFinal : implFinal + mrrFinal*12;
 
   function faixaInfo(pct,campo){
@@ -184,6 +197,13 @@ function calc(){
       mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Desenvolvimento</span><span class="sval-val">${valHtml}/mês</span></div>`;
   }
   
+  if (upgImpl > 0) {
+      ih += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito Upgrade: ${upgName || 'Plano Atual'}</span><span class="sval-val" style="color:var(--danger)">-${f(upgImpl)}</span></div>`;
+  }
+  if (upgMRR > 0) {
+      mh += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito Upgrade: ${upgName || 'Plano Atual'}</span><span class="sval-val" style="color:var(--danger)">-${f(upgMRR)}/mês</span></div>`;
+  }
+  
   if (document.getElementById('impl-lines')) document.getElementById('impl-lines').innerHTML = ih || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem produtos</div>';
   if (document.getElementById('mrr-lines')) document.getElementById('mrr-lines').innerHTML = mh || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem recorrente</div>';
 }
@@ -230,8 +250,13 @@ function gerarPDF(){
   implGross += projImplGross;
 
   const mrrGross = isProjeto ? 0 : (mrrProds + sustVal + devMRR);
-  const implFinal = implGross * fImpl;
-  const mrrFinal  = mrrGross  * fMRR;
+
+  const upgName = document.getElementById('upgName') ? document.getElementById('upgName').value : '';
+  const upgImpl = parseFloat(document.getElementById('upgImpl') ? document.getElementById('upgImpl').value : 0) || 0;
+  const upgMRR  = parseFloat(document.getElementById('upgMRR') ? document.getElementById('upgMRR').value : 0) || 0;
+
+  const implFinal = Math.max(0, (implGross * fImpl) - upgImpl);
+  const mrrFinal  = Math.max(0, (mrrGross  * fMRR) - upgMRR);
 
   const dateStr = cdate ? new Date(cdate+'T00:00:00').toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
   const suiteName = {COMERCIAL:'Comercial',FINANCEIRA:'Financeira',SUPRIMENTOS:'Suprimentos',BENEFICIOS:'Benefícios',POSVENDA:'Pós-Venda'};
@@ -262,6 +287,13 @@ function gerarPDF(){
     ${devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:10px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${devValHtml}<span style="font-size:9px">/mês</span></td></tr>` : ''}
     ${dReason ? `<tr><td style="color:#dc2626;font-size:10px" colspan="3">Motivo do Desconto: ${dReason}</td></tr>` : ''}`;
 
+  const creditRows = (upgImpl > 0 || upgMRR > 0) ? `
+    <tr style="background:#fef2f2">
+      <td style="color:#b91c1c;font-size:10px;padding:10px 14px;">Crédito de Upgrade: ${upgName || 'Solução Atual'}</td>
+      <td style="text-align:right;color:#b91c1c;font-size:10px;padding:10px 14px;">${upgImpl > 0 ? '-'+f(upgImpl) : '—'}</td>
+      <td style="text-align:right;color:#b91c1c;font-size:10px;padding:10px 14px;">${upgMRR > 0 ? '-'+f(upgMRR)+'<span style="font-size:9px">/mês</span>' : '—'}</td>
+    </tr>` : '';
+
   const parcelasAtuais = typeof S_parcelas !== 'undefined' ? S_parcelas : 1;
   const parcelaTexto = parcelasAtuais === 1 ? 'À vista — 7 dias após assinatura' : `${parcelasAtuais}× de ${f(implFinal/parcelasAtuais)} sem juros`;
 
@@ -284,7 +316,7 @@ function gerarPDF(){
       <table style="width:100%;border-collapse:collapse;margin-bottom:14px;page-break-inside:avoid">
         <thead><tr><th style="background:#0e2a5c;color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact">Solução</th><th style="background:#0e2a5c;color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:right;-webkit-print-color-adjust:exact;print-color-adjust:exact">Implantação</th><th style="background:#0e2a5c;color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:right;-webkit-print-color-adjust:exact;print-color-adjust:exact">Recorrência</th></tr></thead>
         <tbody>
-          ${prodRows}${infraRows}
+          ${prodRows}${infraRows}${creditRows}
           <tr style="background:#0e2a5c;-webkit-print-color-adjust:exact;print-color-adjust:exact"><td style="padding:12px 14px;color:#fff;font-weight:700;font-size:12px"><strong>TOTAL LÍQUIDO</strong></td><td style="padding:12px 14px;text-align:right;color:#0ab5a0;font-weight:700;font-size:14px;font-family:'Sora',sans-serif">${f(implFinal)}</td><td style="padding:12px 14px;text-align:right;color:#0ab5a0;font-weight:700;font-size:14px;font-family:'Sora',sans-serif">${f(mrrFinal)}<span style="font-size:10px">/mês</span></td></tr>
         </tbody>
       </table>
@@ -406,7 +438,10 @@ function gerarLink() {
     projValHora: S.suite==='PROJETO' && document.getElementById('projValHora') ? (parseFloat(document.getElementById('projValHora').value)||275) : 0,
     projDesc: S.suite==='PROJETO' && document.getElementById('projDesc') ? document.getElementById('projDesc').value : '',
     type: S.type,
-    parcelas: typeof S_parcelas !== 'undefined' ? S_parcelas : 1
+    parcelas: typeof S_parcelas !== 'undefined' ? S_parcelas : 1,
+    upgName: document.getElementById('upgName') ? document.getElementById('upgName').value : '',
+    upgImpl: parseFloat(document.getElementById('upgImpl') ? document.getElementById('upgImpl').value : 0) || 0,
+    upgMRR: parseFloat(document.getElementById('upgMRR') ? document.getElementById('upgMRR').value : 0) || 0
   };
 
   const jsonStr = JSON.stringify(data);
@@ -454,6 +489,11 @@ function limpar(){
     const e=document.getElementById(id);
     if(e){ e.value=''; e.style.borderColor=''; }
   });
+  if(document.getElementById('upgName')) document.getElementById('upgName').value='';
+  if(document.getElementById('upgImpl')) document.getElementById('upgImpl').value='0';
+  if(document.getElementById('upgMRR')) document.getElementById('upgMRR').value='0';
+  const upgCard = document.getElementById('upgrade-card');
+  if(upgCard) upgCard.style.display = 'none';
   document.getElementById('cDate').value  = new Date().toISOString().split('T')[0];
   document.getElementById('dImpl').value  = '0';
   document.getElementById('dMRR').value   = '0';
