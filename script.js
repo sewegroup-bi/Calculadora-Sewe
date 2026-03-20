@@ -12,11 +12,13 @@ const CAT = {
   PROJETO: null
 };
 
-const S = { type:'NEWLOGO', suite:'COMERCIAL', tier:'SMART', sel:{}, dev:'SIM' };
+const S = { type:'NEWLOGO', suite:'COMERCIAL', tier:'SMART', sel:{}, dev:'SIM', upgrades:[] };
 let S_parcelas = 1;
 
 window.onload=()=>{
   document.getElementById('cDate').value = new Date().toISOString().split('T')[0];
+  S.upgrades = [];
+  upgInit();
   setDev('SIM'); renderTiers(); renderProds(); calc();
 };
 
@@ -25,18 +27,15 @@ function setType(t){
   ['NEWLOGO','CROSS'].forEach(x=>document.getElementById('tb-'+x).classList.toggle('active',x===t)); 
   document.getElementById('type-alert-txt').textContent = t==='NEWLOGO' ? 'New Logo: implantação completa + recorrência mensal. MRR mínimo: R$ 2.800 | Implantação mínima: R$ 5.000.' : 'Cross/Upsell: preços diferenciados para clientes com contrato ativo. MRR mínimo: R$ 1.600 | Sem implantação mínima.'; 
   
-  // Atualiza o valor padrão do campo baseado na escolha
   const el = document.getElementById('uQty');
   if(t === 'CROSS') el.value = 0;
   if(t === 'NEWLOGO' && parseInt(el.value) < 1) el.value = 1;
 
-  // NOVO: Exibir ou esconder o card de Crédito Upgrade
   const upgCard = document.getElementById('upgrade-card');
   if(upgCard) upgCard.style.display = t === 'CROSS' ? 'block' : 'none';
   if(t === 'NEWLOGO') {
-      if(document.getElementById('upgName')) document.getElementById('upgName').value = '';
-      if(document.getElementById('upgImpl')) document.getElementById('upgImpl').value = '0';
-      if(document.getElementById('upgMRR')) document.getElementById('upgMRR').value = '0';
+      S.upgrades = [];
+      renderUpgrades();
   }
 
   renderTiers(); renderProds(); calc(); 
@@ -50,7 +49,7 @@ function toggle(k,impl,mrr,name,isAddon){ if(S.sel[k]) delete S.sel[k]; else S.s
 function changeHoras(d){ const el=document.getElementById('projHoras'); el.value=Math.max(0,(parseInt(el.value)||0)+d); calc(); }
 function changeU(d){ 
   const el = document.getElementById('uQty'); 
-  const minVal = S.type === 'NEWLOGO' ? 1 : 0; // Cross pode chegar a 0
+  const minVal = S.type === 'NEWLOGO' ? 1 : 0;
   el.value = Math.max(minVal, (parseInt(el.value)||0)+d); 
   calc(); 
 }
@@ -59,6 +58,102 @@ function setParcelas(n){ S_parcelas = n; document.querySelectorAll('.parcela-btn
 function f(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
 function escQ(s){ return s.replace(/'/g,"\\'"); }
 function clearErr(el){ if(el.value.trim()) el.style.borderColor=''; }
+
+// ═══════════════════════════════════════════════════
+//  LÓGICA DO CRÉDITO DE UPGRADE (CROSS)
+// ═══════════════════════════════════════════════════
+function upgInit() {
+    const sel = document.getElementById('upg-suite');
+    if(!sel) return;
+    sel.innerHTML = '<option value="">Selecione a suíte...</option>';
+    Object.keys(CAT).forEach(k => {
+        if(k !== 'PROJETO') sel.innerHTML += `<option value="${k}">${k}</option>`;
+    });
+}
+function upgPopulateTiers() {
+    const suite = document.getElementById('upg-suite').value;
+    const sel = document.getElementById('upg-tier');
+    sel.innerHTML = '<option value="">Selecione a oferta...</option>';
+    document.getElementById('upg-prod').innerHTML = '<option value="">Selecione...</option>';
+    document.getElementById('upg-impl-val').value = '0';
+    document.getElementById('upg-mrr-val').value = '0';
+    if(suite && CAT[suite]) {
+        Object.keys(CAT[suite]).forEach(t => {
+            sel.innerHTML += `<option value="${t}">${t}</option>`;
+        });
+    }
+}
+function upgPopulateProds() {
+    const suite = document.getElementById('upg-suite').value;
+    const tier = document.getElementById('upg-tier').value;
+    const sel = document.getElementById('upg-prod');
+    sel.innerHTML = '<option value="">Selecione o produto...</option>';
+    document.getElementById('upg-impl-val').value = '0';
+    document.getElementById('upg-mrr-val').value = '0';
+    if(suite && tier && CAT[suite][tier]) {
+        const data = CAT[suite][tier];
+        sel.innerHTML += `<option value="CORE|${data.core.CR[0]}|${data.core.CR[1]}">Core: ${data.core.name}</option>`;
+        (data.addons||[]).forEach((a,i) => {
+            sel.innerHTML += `<option value="ADDON|${a.CR[0]}|${a.CR[1]}">Add-on: ${a.name}</option>`;
+        });
+    }
+}
+function upgUpdateVals() {
+    const prod = document.getElementById('upg-prod').value;
+    if(!prod) {
+        document.getElementById('upg-impl-val').value = 0;
+        document.getElementById('upg-mrr-val').value = 0;
+        return;
+    }
+    const parts = prod.split('|');
+    document.getElementById('upg-impl-val').value = parts[1];
+    document.getElementById('upg-mrr-val').value = parts[2];
+}
+function addUpgrade() {
+    const prodSel = document.getElementById('upg-prod');
+    if(!prodSel.value) return alert('Selecione um produto para abater.');
+    
+    // Pega o nome customizado pra ficar bonitinho na lista
+    const suiteName = document.getElementById('upg-suite').value;
+    const tierName = document.getElementById('upg-tier').value;
+    const prodName = prodSel.options[prodSel.selectedIndex].text;
+    const fullName = `${suiteName} ${tierName} - ${prodName}`;
+
+    const impl = parseFloat(document.getElementById('upg-impl-val').value) || 0;
+    const mrr = parseFloat(document.getElementById('upg-mrr-val').value) || 0;
+    
+    if(!S.upgrades) S.upgrades = [];
+    S.upgrades.push({ name: fullName, impl, mrr });
+    
+    document.getElementById('upg-suite').value = '';
+    upgPopulateTiers(); // Reseta os selects dependentes
+    
+    renderUpgrades();
+    calc();
+}
+function removeUpgrade(idx) {
+    S.upgrades.splice(idx, 1);
+    renderUpgrades();
+    calc();
+}
+function renderUpgrades() {
+    const list = document.getElementById('upg-list');
+    if(!list) return;
+    if(!S.upgrades || S.upgrades.length === 0) {
+        list.innerHTML = '';
+        return;
+    }
+    list.innerHTML = S.upgrades.map((u, i) => `
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#fef2f2;border:1px solid #fecaca;padding:10px 14px;border-radius:8px">
+            <div>
+                <div style="font-size:12px;font-weight:700;color:#991b1b">${u.name}</div>
+                <div style="font-size:10px;color:#b91c1c;margin-top:2px">Implantação: -${f(u.impl)} | MRR: -${f(u.mrr)}/mês</div>
+            </div>
+            <button onclick="removeUpgrade(${i})" style="background:transparent;border:none;color:#dc2626;cursor:pointer;font-size:16px;padding:4px;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
+        </div>
+    `).join('');
+}
+
 
 // ═══════════════════════════════════════════════════
 //  CALCULA A NOVA REGRA
@@ -118,9 +213,9 @@ function calc(){
       }
   }
 
-  const upgName = document.getElementById('upgName') ? document.getElementById('upgName').value : '';
-  const upgImpl = parseFloat(document.getElementById('upgImpl') ? document.getElementById('upgImpl').value : 0) || 0;
-  const upgMRR = parseFloat(document.getElementById('upgMRR') ? document.getElementById('upgMRR').value : 0) || 0;
+  // Soma os créditos da array
+  let upgImpl = 0, upgMRR = 0;
+  (S.upgrades || []).forEach(u => { upgImpl += u.impl; upgMRR += u.mrr; });
 
   const implFinal = Math.max(0, (implGross * fImpl) - upgImpl);
   const mrrFinal  = Math.max(0, (mrrGross  * fMRR) - upgMRR);
@@ -197,12 +292,15 @@ function calc(){
       mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Desenvolvimento</span><span class="sval-val">${valHtml}/mês</span></div>`;
   }
   
-  if (upgImpl > 0) {
-      ih += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito Upgrade: ${upgName || 'Plano Atual'}</span><span class="sval-val" style="color:var(--danger)">-${f(upgImpl)}</span></div>`;
-  }
-  if (upgMRR > 0) {
-      mh += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito Upgrade: ${upgName || 'Plano Atual'}</span><span class="sval-val" style="color:var(--danger)">-${f(upgMRR)}/mês</span></div>`;
-  }
+  // Renderiza no painel lateral cada crédito que foi inserido
+  (S.upgrades || []).forEach(u => {
+      if (u.impl > 0) {
+          ih += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito: ${u.name}</span><span class="sval-val" style="color:var(--danger)">-${f(u.impl)}</span></div>`;
+      }
+      if (u.mrr > 0) {
+          mh += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito: ${u.name}</span><span class="sval-val" style="color:var(--danger)">-${f(u.mrr)}/mês</span></div>`;
+      }
+  });
   
   if (document.getElementById('impl-lines')) document.getElementById('impl-lines').innerHTML = ih || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem produtos</div>';
   if (document.getElementById('mrr-lines')) document.getElementById('mrr-lines').innerHTML = mh || '<div style="text-align:center;color:var(--muted);font-size:11px">Sem recorrente</div>';
@@ -251,9 +349,8 @@ function gerarPDF(){
 
   const mrrGross = isProjeto ? 0 : (mrrProds + sustVal + devMRR);
 
-  const upgName = document.getElementById('upgName') ? document.getElementById('upgName').value : '';
-  const upgImpl = parseFloat(document.getElementById('upgImpl') ? document.getElementById('upgImpl').value : 0) || 0;
-  const upgMRR  = parseFloat(document.getElementById('upgMRR') ? document.getElementById('upgMRR').value : 0) || 0;
+  let upgImpl = 0, upgMRR = 0;
+  (S.upgrades || []).forEach(u => { upgImpl += u.impl; upgMRR += u.mrr; });
 
   const implFinal = Math.max(0, (implGross * fImpl) - upgImpl);
   const mrrFinal  = Math.max(0, (mrrGross  * fMRR) - upgMRR);
@@ -287,12 +384,13 @@ function gerarPDF(){
     ${devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:10px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;font-size:10px">—</td><td style="text-align:right;color:#555;font-size:10px">${devValHtml}<span style="font-size:9px">/mês</span></td></tr>` : ''}
     ${dReason ? `<tr><td style="color:#dc2626;font-size:10px" colspan="3">Motivo do Desconto: ${dReason}</td></tr>` : ''}`;
 
-  const creditRows = (upgImpl > 0 || upgMRR > 0) ? `
+  const creditRows = (S.upgrades || []).map(u => `
     <tr style="background:#fef2f2">
-      <td style="color:#b91c1c;font-size:10px;padding:10px 14px;">Crédito de Upgrade: ${upgName || 'Solução Atual'}</td>
-      <td style="text-align:right;color:#b91c1c;font-size:10px;padding:10px 14px;">${upgImpl > 0 ? '-'+f(upgImpl) : '—'}</td>
-      <td style="text-align:right;color:#b91c1c;font-size:10px;padding:10px 14px;">${upgMRR > 0 ? '-'+f(upgMRR)+'<span style="font-size:9px">/mês</span>' : '—'}</td>
-    </tr>` : '';
+      <td style="color:#b91c1c;font-size:10px;padding:10px 14px;">Crédito Upgrade: ${u.name}</td>
+      <td style="text-align:right;color:#b91c1c;font-size:10px;padding:10px 14px;">${u.impl > 0 ? '-'+f(u.impl) : '—'}</td>
+      <td style="text-align:right;color:#b91c1c;font-size:10px;padding:10px 14px;">${u.mrr > 0 ? '-'+f(u.mrr)+'<span style="font-size:9px">/mês</span>' : '—'}</td>
+    </tr>
+  `).join('');
 
   const parcelasAtuais = typeof S_parcelas !== 'undefined' ? S_parcelas : 1;
   const parcelaTexto = parcelasAtuais === 1 ? 'À vista — 7 dias após assinatura' : `${parcelasAtuais}× de ${f(implFinal/parcelasAtuais)} sem juros`;
@@ -439,9 +537,7 @@ function gerarLink() {
     projDesc: S.suite==='PROJETO' && document.getElementById('projDesc') ? document.getElementById('projDesc').value : '',
     type: S.type,
     parcelas: typeof S_parcelas !== 'undefined' ? S_parcelas : 1,
-    upgName: document.getElementById('upgName') ? document.getElementById('upgName').value : '',
-    upgImpl: parseFloat(document.getElementById('upgImpl') ? document.getElementById('upgImpl').value : 0) || 0,
-    upgMRR: parseFloat(document.getElementById('upgMRR') ? document.getElementById('upgMRR').value : 0) || 0
+    upgrades: S.upgrades || []
   };
 
   const jsonStr = JSON.stringify(data);
@@ -489,11 +585,12 @@ function limpar(){
     const e=document.getElementById(id);
     if(e){ e.value=''; e.style.borderColor=''; }
   });
-  if(document.getElementById('upgName')) document.getElementById('upgName').value='';
-  if(document.getElementById('upgImpl')) document.getElementById('upgImpl').value='0';
-  if(document.getElementById('upgMRR')) document.getElementById('upgMRR').value='0';
+  
+  S.upgrades = [];
+  renderUpgrades();
   const upgCard = document.getElementById('upgrade-card');
   if(upgCard) upgCard.style.display = 'none';
+
   document.getElementById('cDate').value  = new Date().toISOString().split('T')[0];
   document.getElementById('dImpl').value  = '0';
   document.getElementById('dMRR').value   = '0';
