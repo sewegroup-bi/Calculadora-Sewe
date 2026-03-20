@@ -128,9 +128,16 @@
 
         const mrrGross = d.isProjeto ? 0 : (mrrProds + sustVal + d.devMRR);
 
-        const upgImpl = d.upgImpl || 0;
-        const upgMRR  = d.upgMRR || 0;
-        const upgName = d.upgName || '';
+        // Pega a array de upgrades ou cria uma vazia
+        const upgrades = d.upgrades || [];
+        
+        // Retrocompatibilidade (caso abram um link gerado com o código antigo)
+        if(d.upgName || d.upgImpl || d.upgMRR) {
+            upgrades.push({ name: d.upgName || 'Crédito', impl: d.upgImpl || 0, mrr: d.upgMRR || 0 });
+        }
+
+        let upgImpl = 0, upgMRR = 0;
+        upgrades.forEach(u => { upgImpl += u.impl; upgMRR += u.mrr; });
 
         const implFinal = Math.max(0, (implGross * fImpl) - upgImpl);
         const mrrFinal  = Math.max(0, (mrrGross * fMRR) - upgMRR);
@@ -161,12 +168,13 @@
           ${d.devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:12px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;">—</td><td style="text-align:right;color:#555;font-weight: 600;">${devValHtml}<span style="font-size:10px;font-weight: normal;">/mês</span></td></tr>` : ''}
           ${d.dReason ? `<tr><td style="color:#dc2626;font-size:11px" colspan="3">Motivo do Desconto: ${d.dReason}</td></tr>` : ''}`;
 
-        const creditRows = (upgImpl > 0 || upgMRR > 0) ? `
+        const creditRows = upgrades.map(u => `
           <tr style="background:#fef2f2">
-            <td style="color:#b91c1c;font-size:12px;padding:14px 16px;">Crédito de Upgrade: ${upgName || 'Solução Atual'}</td>
-            <td style="text-align:right;color:#b91c1c;padding:14px 16px;">${upgImpl > 0 ? '-'+f(upgImpl) : '—'}</td>
-            <td style="text-align:right;color:#b91c1c;font-weight: 600;padding:14px 16px;">${upgMRR > 0 ? '-'+f(upgMRR)+'<span style="font-size:10px;font-weight: normal;">/mês</span>' : '—'}</td>
-          </tr>` : '';
+            <td style="color:#b91c1c;font-size:12px;padding:14px 16px;">Crédito Upgrade: ${u.name}</td>
+            <td style="text-align:right;color:#b91c1c;padding:14px 16px;">${u.impl > 0 ? '-'+f(u.impl) : '—'}</td>
+            <td style="text-align:right;color:#b91c1c;font-weight: 600;padding:14px 16px;">${u.mrr > 0 ? '-'+f(u.mrr)+'<span style="font-size:10px;font-weight: normal;">/mês</span>' : '—'}</td>
+          </tr>
+        `).join('');
 
         const parcelasAtuais = d.parcelas || 1;
         const parcelaTexto = parcelasAtuais === 1 ? 'À vista — 7 dias após assinatura' : `${parcelasAtuais}× de ${f(implFinal/parcelasAtuais)} sem juros`;
