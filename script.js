@@ -113,7 +113,6 @@ function addUpgrade() {
     const prodSel = document.getElementById('upg-prod');
     if(!prodSel.value) return alert('Selecione um produto para abater.');
     
-    // Pega o nome customizado pra ficar bonitinho na lista
     const suiteName = document.getElementById('upg-suite').value;
     const tierName = document.getElementById('upg-tier').value;
     const prodName = prodSel.options[prodSel.selectedIndex].text;
@@ -126,7 +125,7 @@ function addUpgrade() {
     S.upgrades.push({ name: fullName, impl, mrr });
     
     document.getElementById('upg-suite').value = '';
-    upgPopulateTiers(); // Reseta os selects dependentes
+    upgPopulateTiers(); 
     
     renderUpgrades();
     calc();
@@ -213,7 +212,6 @@ function calc(){
       }
   }
 
-  // Soma os créditos da array
   let upgImpl = 0, upgMRR = 0;
   (S.upgrades || []).forEach(u => { upgImpl += u.impl; upgMRR += u.mrr; });
 
@@ -292,7 +290,6 @@ function calc(){
       mh+=`<div class="sval-row sval-indent"><span class="sval-lbl">Desenvolvimento</span><span class="sval-val">${valHtml}/mês</span></div>`;
   }
   
-  // Renderiza no painel lateral cada crédito que foi inserido
   (S.upgrades || []).forEach(u => {
       if (u.impl > 0) {
           ih += `<div class="sval-row sval-indent"><span class="sval-lbl" style="color:var(--danger)">Crédito: ${u.name}</span><span class="sval-val" style="color:var(--danger)">-${f(u.impl)}</span></div>`;
@@ -507,9 +504,9 @@ script, noscript, #print-trigger { display: none !important; }
 }
 
 // ═══════════════════════════════════════════════════
-//  MÁGICA: GERA LINK PARA COMPARTILHAMENTO ONLINE
+//  MÁGICA: GERA LINK PARA COMPARTILHAMENTO ONLINE (COM ENCURTADOR)
 // ═══════════════════════════════════════════════════
-function gerarLink() {
+async function gerarLink() {
   const reqFields = [{id:'cName',label:'Nome do Cliente'},{id:'cContact',label:'Contato'},{id:'cConsult',label:'Consultor Responsável'}];
   const missing = reqFields.filter(fx=>{ const el = document.getElementById(fx.id); return !el || !el.value.trim(); });
   if(missing.length>0){
@@ -547,19 +544,50 @@ function gerarLink() {
   if (baseUrl.endsWith('index.html')) baseUrl = baseUrl.replace('index.html', '');
   if (!baseUrl.endsWith('/')) baseUrl += '/';
   
-  const link = `${baseUrl}proposta.html?data=${base64}`;
+  const longLink = `${baseUrl}proposta.html?data=${base64}`;
 
-  navigator.clipboard.writeText(link).then(()=>{
-    const btn = document.getElementById('btn-link');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '✅ Link Copiado!';
+  const btn = document.getElementById('btn-link');
+  const orig = btn.innerHTML;
+  
+  btn.innerHTML = '⏳ Gerando link curto...';
+  btn.style.pointerEvents = 'none';
+
+  try {
+    const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(longLink)}`);
+    const result = await response.json();
+    
+    let finalLink = longLink;
+    if (result.shorturl) {
+        finalLink = result.shorturl;
+    }
+
+    await navigator.clipboard.writeText(finalLink);
+    
+    btn.innerHTML = '✅ Link Curto Copiado!';
     btn.style.background = '#16a34a';
     btn.style.borderColor = '#16a34a';
     btn.style.color = '#fff';
-    setTimeout(()=>{ btn.innerHTML = orig; btn.style.background = '#0ab5a0'; btn.style.borderColor = ''; btn.style.color='';}, 3000);
-  }).catch(err => {
-    prompt("Copie o link abaixo para enviar ao cliente:", link);
-  });
+
+  } catch(err) {
+    console.error("Erro ao encurtar:", err);
+    try {
+      await navigator.clipboard.writeText(longLink);
+      btn.innerHTML = '✅ Copiado (Link Longo)';
+      btn.style.background = '#f59e0b';
+      btn.style.borderColor = '#f59e0b';
+      btn.style.color = '#fff';
+    } catch (e) {
+      prompt("Falha ao copiar automaticamente. Copie o link abaixo:", longLink);
+    }
+  }
+
+  setTimeout(() => { 
+    btn.innerHTML = orig; 
+    btn.style.background = ''; 
+    btn.style.borderColor = ''; 
+    btn.style.color='';
+    btn.style.pointerEvents = 'auto';
+  }, 3000);
 }
 
 function copiar(){
