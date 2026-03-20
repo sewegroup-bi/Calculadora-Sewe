@@ -127,8 +127,13 @@
         implGross += projImplGross;
 
         const mrrGross = d.isProjeto ? 0 : (mrrProds + sustVal + d.devMRR);
-        const implFinal = implGross * fImpl;
-        const mrrFinal  = mrrGross * fMRR;
+
+        const upgImpl = d.upgImpl || 0;
+        const upgMRR  = d.upgMRR || 0;
+        const upgName = d.upgName || '';
+
+        const implFinal = Math.max(0, (implGross * fImpl) - upgImpl);
+        const mrrFinal  = Math.max(0, (mrrGross * fMRR) - upgMRR);
 
         const dateStr = d.cdate ? new Date(d.cdate+'T00:00:00').toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
         
@@ -156,6 +161,13 @@
           ${d.devMRR>0 ? `<tr style="background:#fafbfc"><td style="color:#555;font-size:12px">Pacote Desenvolvimento (+5h/mês)</td><td style="text-align:right;color:#555;">—</td><td style="text-align:right;color:#555;font-weight: 600;">${devValHtml}<span style="font-size:10px;font-weight: normal;">/mês</span></td></tr>` : ''}
           ${d.dReason ? `<tr><td style="color:#dc2626;font-size:11px" colspan="3">Motivo do Desconto: ${d.dReason}</td></tr>` : ''}`;
 
+        const creditRows = (upgImpl > 0 || upgMRR > 0) ? `
+          <tr style="background:#fef2f2">
+            <td style="color:#b91c1c;font-size:12px;padding:14px 16px;">Crédito de Upgrade: ${upgName || 'Solução Atual'}</td>
+            <td style="text-align:right;color:#b91c1c;padding:14px 16px;">${upgImpl > 0 ? '-'+f(upgImpl) : '—'}</td>
+            <td style="text-align:right;color:#b91c1c;font-weight: 600;padding:14px 16px;">${upgMRR > 0 ? '-'+f(upgMRR)+'<span style="font-size:10px;font-weight: normal;">/mês</span>' : '—'}</td>
+          </tr>` : '';
+
         const parcelasAtuais = d.parcelas || 1;
         const parcelaTexto = parcelasAtuais === 1 ? 'À vista — 7 dias após assinatura' : `${parcelasAtuais}× de ${f(implFinal/parcelasAtuais)} sem juros`;
 
@@ -178,7 +190,7 @@
             <table>
               <thead><tr><th style="background:#0e2a5c;color:#fff;">Solução</th><th style="background:#0e2a5c;color:#fff;text-align:right;">Implantação</th><th style="background:#0e2a5c;color:#fff;text-align:right;">Recorrência</th></tr></thead>
               <tbody>
-                ${prodRows}${infraRows}
+                ${prodRows}${infraRows}${creditRows}
                 <tr style="background:#0e2a5c;"><td style="padding:16px;color:#fff;font-weight:700;font-size:14px"><strong>TOTAL LÍQUIDO</strong></td><td style="padding:16px;text-align:right;color:#0ab5a0;font-weight:700;font-size:16px;font-family:'Sora',sans-serif">${f(implFinal)}</td><td style="padding:16px;text-align:right;color:#0ab5a0;font-weight:700;font-size:16px;font-family:'Sora',sans-serif">${f(mrrFinal)}<span style="font-size:11px">/mês</span></td></tr>
               </tbody>
             </table>
